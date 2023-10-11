@@ -53,8 +53,8 @@ dependencies {
     testAnnotationProcessor 'org.projectlombok:lombok'
 
     // Spring Security
-    // implementation 'org.springframework.boot:spring-boot-starter-security'
-    // testImplementation 'org.springframework.security:spring-security-test'
+     implementation 'org.springframework.boot:spring-boot-starter-security'
+     testImplementation 'org.springframework.security:spring-security-test'
 
     // Spring Test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
