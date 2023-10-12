@@ -10,6 +10,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -37,4 +38,16 @@ public class Member extends BaseTimeEntity {
 
     @Column(unique = true)
     private String nickname;
+
+    public Member(Long id, String socialUid, Set<RoleType> roleTypes, String nickname, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        super(createdAt, updatedAt);
+        this.id = id;
+        this.socialUid = socialUid;
+        this.roleTypes = roleTypes;
+        this.nickname = nickname;
+    }
+
+    public static Member createNewMember(String socialUid) {
+        return new Member(null, socialUid, Set.of(RoleType.USER), null, null, null);
+    }
 }
