@@ -1,5 +1,6 @@
 ### Custom ###
 src/main/resources/env.properties
+src/main/resources/application-test.properties
 
 # Created by https://www.toptal.com/developers/gitignore/api/macos,windows,intellij+all,eclipse,java,gradle,vs
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,windows,intellij+all,eclipse,java,gradle,vs
