@@ -1,10 +1,13 @@
 package com.momong.backend.global.auth.service;
 
 import com.momong.backend.domain.member.dto.MemberDto;
+import com.momong.backend.domain.member.service.MemberQueryService;
 import com.momong.backend.global.auth.JwtTokenProvider;
 import com.momong.backend.global.auth.dto.AccessAndRefreshTokensInfoDto;
 import com.momong.backend.global.auth.dto.JwtTokenInfoDto;
 import com.momong.backend.global.auth.entity.RefreshToken;
+import com.momong.backend.global.auth.exception.RefreshTokenValidateException;
+import com.momong.backend.global.auth.exception.TokenValidateException;
 import com.momong.backend.global.auth.repository.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class JwtTokenCommandService {
 
+    private final MemberQueryService memberQueryService;
     private final RefreshTokenRepository refreshTokenRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
@@ -32,5 +36,21 @@ public class JwtTokenCommandService {
         refreshTokenRepository.save(new RefreshToken(refreshTokenInfo.token(), memberDto.getId()));
 
         return new AccessAndRefreshTokensInfoDto(accessTokenInfo, refreshTokenInfo);
+    }
+
+    public AccessAndRefreshTokensInfoDto refreshAccessAndRefreshToken(String refreshToken) {
+        try {
+            jwtTokenProvider.validateToken(refreshToken);    // 유효한 jwt token인지 검증
+        } catch (TokenValidateException ex) {
+            throw new RefreshTokenValidateException(ex);
+        }
+
+        RefreshToken refreshTokenEntity = refreshTokenRepository.findById(refreshToken).orElseThrow(RefreshTokenValidateException::new);
+        refreshTokenRepository.delete(refreshTokenEntity);
+
+        Long memberId = refreshTokenEntity.getMemberId();
+        MemberDto memberDto = memberQueryService.getDtoById(memberId);
+
+        return createAccessAndRefreshToken(memberDto);
     }
 }

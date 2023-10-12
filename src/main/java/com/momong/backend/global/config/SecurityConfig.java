@@ -18,7 +18,8 @@ public class SecurityConfig {
     private static final String[] AUTH_WHITE_PATHS = {
             "/swagger-ui/**",
             "/v3/api-docs/**",
-            "/api/v*/auth/login/**"
+            "/api/v*/auth/login/**",
+            "/api/v*/auth/tokens/refresh"
     };
 
     @Bean

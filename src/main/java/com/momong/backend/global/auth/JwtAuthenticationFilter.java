@@ -38,7 +38,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (accessToken != null) {
             try {
                 jwtTokenProvider.validateToken(accessToken);
-            } catch (TokenValidateException ex) {
+            } catch (Exception ex) {
                 throw new AccessTokenValidateException(ex);
             }
             Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);

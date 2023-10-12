@@ -24,25 +24,4 @@ public class LoginResponse {
     public static LoginResponse from(MemberDto memberDto, AccessAndRefreshTokensInfoDto accessAndRefreshTokensInfoDto) {
         return new LoginResponse(MemberResponse.from(memberDto), AccessAndRefreshTokensResponse.from(accessAndRefreshTokensInfoDto));
     }
-
-    @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    @NoArgsConstructor(access = AccessLevel.PRIVATE)
-    @Getter
-    private static class AccessAndRefreshTokensResponse {
-
-        @Schema(description = "Access token")
-        private TokenResponse accessToken;
-
-        @Schema(description = "Refresh token")
-        private TokenResponse refreshToken;
-
-        public static AccessAndRefreshTokensResponse from(AccessAndRefreshTokensInfoDto accessAndRefreshTokensInfoDto) {
-            JwtTokenInfoDto accessToken = accessAndRefreshTokensInfoDto.accessToken();
-            JwtTokenInfoDto refreshToken = accessAndRefreshTokensInfoDto.refreshToken();
-            return new AccessAndRefreshTokensResponse(
-                    new TokenResponse(accessToken.token(), accessToken.expiresAt()),
-                    new TokenResponse(refreshToken.token(), refreshToken.expiresAt())
-            );
-        }
-    }
 }

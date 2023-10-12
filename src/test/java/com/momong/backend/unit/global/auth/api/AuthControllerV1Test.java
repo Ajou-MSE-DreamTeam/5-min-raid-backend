@@ -9,6 +9,7 @@ import com.momong.backend.domain.member.service.MemberQueryService;
 import com.momong.backend.global.auth.api.AuthControllerV1;
 import com.momong.backend.global.auth.dto.AccessAndRefreshTokensInfoDto;
 import com.momong.backend.global.auth.dto.JwtTokenInfoDto;
+import com.momong.backend.global.auth.dto.request.RefreshAccessAndRefreshTokensRequest;
 import com.momong.backend.global.auth.dto.request.UnityLoginRequest;
 import com.momong.backend.global.auth.service.JwtTokenCommandService;
 import org.junit.jupiter.api.DisplayName;
@@ -125,14 +126,34 @@ class AuthControllerV1Test {
         verifyEveryMocksShouldHaveNoMoreInteractions();
     }
 
+    @DisplayName("Refresh token이 주어지고, access token과 refresh token을 새로 발급받으면, 새로 생성된 token들을 반환한다.")
+    @Test
+    void givenRefreshToken_whenRefreshAccessAndRefreshTokens_thenReturnCreatedTokens() throws Exception {
+        // given
+        RefreshAccessAndRefreshTokensRequest request = createRefreshAccessAndRefreshTokensRequest();
+        JwtTokenInfoDto expectedAccessToken = new JwtTokenInfoDto("access-token", LocalDateTime.of(2023, 1, 1, 0, 0));
+        JwtTokenInfoDto expectedRefreshToken = new JwtTokenInfoDto("refresh-token", LocalDateTime.of(2023, 12, 31, 23, 59));
+        AccessAndRefreshTokensInfoDto expectedTokens = new AccessAndRefreshTokensInfoDto(expectedAccessToken, expectedRefreshToken);
+        given(jwtTokenCommandService.refreshAccessAndRefreshToken(request.getRefreshToken())).willReturn(expectedTokens);
+
+        // when & then
+        mvc.perform(
+                        post("/api/v1/auth/tokens/refresh")
+                                .header(API_MINOR_VERSION_HEADER_NAME, 1)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(mapper.writeValueAsString(request))
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.accessToken.token").value(expectedAccessToken.token()))
+                .andExpect(jsonPath("$.accessToken.expiresAt").value("2023-01-01T00:00:00"))
+                .andExpect(jsonPath("$.refreshToken.token").value(expectedRefreshToken.token()))
+                .andExpect(jsonPath("$.refreshToken.expiresAt").value("2023-12-31T23:59:00"));
+    }
+
     private void verifyEveryMocksShouldHaveNoMoreInteractions() {
         then(memberCommandService).shouldHaveNoMoreInteractions();
         then(memberQueryService).shouldHaveNoMoreInteractions();
         then(jwtTokenCommandService).shouldHaveNoMoreInteractions();
-    }
-
-    private UnityLoginRequest createUnityLoginRequest(String id) {
-        return new UnityLoginRequest(id);
     }
 
     private MemberDto createMemberDto(Long memberId, String socialUid) {
@@ -142,5 +163,13 @@ class AuthControllerV1Test {
                 Set.of(RoleType.USER),
                 socialUid
         );
+    }
+
+    private UnityLoginRequest createUnityLoginRequest(String id) {
+        return new UnityLoginRequest(id);
+    }
+
+    private RefreshAccessAndRefreshTokensRequest createRefreshAccessAndRefreshTokensRequest() {
+        return new RefreshAccessAndRefreshTokensRequest("refresh-token");
     }
 }

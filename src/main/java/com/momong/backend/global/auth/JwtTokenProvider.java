@@ -4,10 +4,9 @@ import com.momong.backend.domain.member.dto.MemberDto;
 import com.momong.backend.global.auth.dto.JwtTokenInfoDto;
 import com.momong.backend.global.auth.exception.TokenValidateException;
 import com.momong.backend.global.common.properties.JwtProperties;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -102,11 +101,7 @@ public class JwtTokenProvider {
      * 토큰의 유효성, 만료일자 검증
      *
      * @param token 검증하고자 하는 JWT token
-     * @throws io.jsonwebtoken.UnsupportedJwtException     if the claimsJws argument does not represent an Claims JWS
-     * @throws io.jsonwebtoken.MalformedJwtException       if the claimsJws string is not a valid JWS
-     * @throws io.jsonwebtoken.security.SignatureException if the claimsJws JWS signature validation fails
-     * @throws io.jsonwebtoken.ExpiredJwtException         if the specified JWT is a Claims JWT and the Claims has an expiration time before the time this method is invoked.
-     * @throws IllegalArgumentException                    if the claimsJws string is null or empty or only whitespace
+     * @throws TokenValidateException Token 값이 잘못되거나 만료되어 유효하지 않은 경우
      */
     public void validateToken(String token) {
         try {
@@ -114,8 +109,16 @@ public class JwtTokenProvider {
                     .setSigningKey(secretKey)
                     .build()
                     .parseClaimsJws(token);
-        } catch (Exception ex) {
-            throw new TokenValidateException(ex);
+        } catch (UnsupportedJwtException ex) {
+            throw new TokenValidateException("The claimsJws argument does not represent an Claims JWS", ex);
+        } catch (MalformedJwtException ex) {
+            throw new TokenValidateException("The claimsJws string is not a valid JWS", ex);
+        } catch (SignatureException ex) {
+            throw new TokenValidateException("The claimsJws JWS signature validation fails", ex);
+        } catch (ExpiredJwtException ex) {
+            throw new TokenValidateException("The specified JWT is a Claims JWT and the Claims has an expiration time before the time this method is invoked.", ex);
+        } catch (IllegalArgumentException ex) {
+            throw new TokenValidateException("The claimsJws string is null or empty or only whitespace", ex);
         }
     }
 
@@ -147,7 +150,7 @@ public class JwtTokenProvider {
      * @param token Jwt token
      * @return 추출한 회원 정보(username == email)
      */
-    private String getUsername(String token) {
+    public String getUsername(String token) {
         return getClaims(token).getSubject();
     }
 

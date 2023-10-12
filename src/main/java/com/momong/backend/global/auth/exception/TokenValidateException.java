@@ -5,15 +5,7 @@ import com.momong.backend.global.exception.constant.CustomExceptionType;
 
 public class TokenValidateException extends UnauthorizedException {
 
-    public TokenValidateException() {
-        super(CustomExceptionType.TOKEN_VALIDATE);
-    }
-
-    public TokenValidateException(String optionalMessage) {
-        super(CustomExceptionType.TOKEN_VALIDATE, optionalMessage);
-    }
-
-    public TokenValidateException(Throwable cause) {
-        super(CustomExceptionType.TOKEN_VALIDATE, cause);
+    public TokenValidateException(String optionalMessage, Throwable cause) {
+        super(CustomExceptionType.TOKEN_VALIDATE, optionalMessage, cause);
     }
 }

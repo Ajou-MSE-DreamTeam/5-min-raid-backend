@@ -8,4 +8,8 @@ public class RefreshTokenValidateException extends UnauthorizedException {
     public RefreshTokenValidateException() {
         super(CustomExceptionType.REFRESH_TOKEN_VALIDATE);
     }
+
+    public RefreshTokenValidateException(Throwable cause) {
+        super(CustomExceptionType.REFRESH_TOKEN_VALIDATE, cause);
+    }
 }
