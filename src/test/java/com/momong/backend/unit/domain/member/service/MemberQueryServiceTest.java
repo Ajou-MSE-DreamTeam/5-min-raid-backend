@@ -3,6 +3,7 @@ package com.momong.backend.unit.domain.member.service;
 import com.momong.backend.domain.member.constant.RoleType;
 import com.momong.backend.domain.member.dto.MemberDto;
 import com.momong.backend.domain.member.entity.Member;
+import com.momong.backend.domain.member.exception.MemberNotFoundByIdException;
 import com.momong.backend.domain.member.repository.MemberRepository;
 import com.momong.backend.domain.member.service.MemberQueryService;
 import org.junit.jupiter.api.DisplayName;
@@ -17,6 +18,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
@@ -50,6 +52,41 @@ class MemberQueryServiceTest {
                 .hasFieldOrPropertyWithValue("socialUid", expectedResult.getSocialUid());
     }
 
+    @DisplayName("회원의 id가 주어지고, 주어진 id로 회원 entity를 조회하면, 조회된 entity를 반환한다.")
+    @Test
+    void givenMemberId_whenGetMemberEntity_thenReturnMemberEntity() {
+        // given
+        long memberId = 1L;
+        Member expectedResult = createMember(memberId);
+        given(memberRepository.findById(memberId)).willReturn(Optional.of(expectedResult));
+
+        // when
+        Member actualResult = sut.getById(memberId);
+
+        // then
+        then(memberRepository).should().findById(memberId);
+        verifyEveryMocksShouldHaveNoMoreInteractions();
+        assertThat(actualResult)
+                .hasFieldOrPropertyWithValue("id", expectedResult.getId())
+                .hasFieldOrPropertyWithValue("nickname", expectedResult.getNickname());
+    }
+
+    @DisplayName("존재하지 않는 회원의 id가 주어지고, 주어진 id로 회원 entity를 조회하면, 조회된 entity를 반환한다.")
+    @Test
+    void givenNotExistentMemberId_whenGetMemberEntity_thenThrowMemberNotFoundByIdException() {
+        // given
+        long memberId = 1L;
+        given(memberRepository.findById(memberId)).willReturn(Optional.empty());
+
+        // when
+        Throwable t = catchThrowable(() -> sut.getById(memberId));
+
+        // then
+        then(memberRepository).should().findById(memberId);
+        verifyEveryMocksShouldHaveNoMoreInteractions();
+        assertThat(t).isInstanceOf(MemberNotFoundByIdException.class);
+    }
+
     @DisplayName("회원의 id가 주어지고, 주어진 id로 회원 dto를 조회하면, 조회된 member dto를 반환한다.")
     @Test
     void givenSocialUid_whenGetMemberDtoWithSocialUid_thenReturnMemberDto() {
@@ -69,8 +106,29 @@ class MemberQueryServiceTest {
                 .hasFieldOrPropertyWithValue("socialUid", expectedResult.getSocialUid());
     }
 
+    @DisplayName("닉네임이 주어지고, 주어진 닉네임으로 회원 존재 여부를 조회하면, 조회 결과를 반환한다.")
+    @Test
+    void givenNickname_whenGetExistenceOfMember_thenReturnExistence() {
+        // given
+        String nickname = "nickname";
+        boolean expectedResult = false;
+        given(memberRepository.existsByNickname(nickname)).willReturn(expectedResult);
+
+        // when
+        boolean actualResult = sut.existsByNickname(nickname);
+
+        // then
+        then(memberRepository).should().existsByNickname(nickname);
+        verifyEveryMocksShouldHaveNoMoreInteractions();
+        assertThat(actualResult).isEqualTo(expectedResult);
+    }
+
     private void verifyEveryMocksShouldHaveNoMoreInteractions() {
         then(memberRepository).shouldHaveNoMoreInteractions();
+    }
+
+    private Member createMember(Long memberId) {
+        return createMember(memberId, String.valueOf(memberId));
     }
 
     private Member createMember(Long memberId, String socialUid) {
