@@ -19,7 +19,8 @@ public class SecurityConfig {
             "/swagger-ui/**",
             "/v3/api-docs/**",
             "/api/v*/auth/login/**",
-            "/api/v*/auth/tokens/refresh"
+            "/api/v*/auth/tokens/refresh",
+            "/api/v*/auth/refresh-token/validity"
     };
 
     @Bean

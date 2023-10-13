@@ -12,6 +12,7 @@ import com.momong.backend.global.auth.dto.JwtTokenInfoDto;
 import com.momong.backend.global.auth.dto.request.RefreshAccessAndRefreshTokensRequest;
 import com.momong.backend.global.auth.dto.request.UnityLoginRequest;
 import com.momong.backend.global.auth.service.JwtTokenCommandService;
+import com.momong.backend.global.auth.service.JwtTokenQueryService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,7 @@ import java.util.Set;
 import static com.momong.backend.global.common.constant.GlobalConstants.API_MINOR_VERSION_HEADER_NAME;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -45,6 +47,9 @@ class AuthControllerV1Test {
 
     @MockBean
     private JwtTokenCommandService jwtTokenCommandService;
+
+    @MockBean
+    private JwtTokenQueryService jwtTokenQueryService;
 
     private final MockMvc mvc;
     private final ObjectMapper mapper;
@@ -150,10 +155,29 @@ class AuthControllerV1Test {
                 .andExpect(jsonPath("$.refreshToken.expiresAt").value("2023-12-31T23:59:00"));
     }
 
+    @DisplayName("Refresh token이 주어지고, 주어진 refresh token의 유효성을 검사하면, 유효함 여부를 반환한다.")
+    @Test
+    void givenRefreshToken_whenValidateRefreshToken_thenReturnValidityOfRefreshToken() throws Exception {
+        // given
+        String refreshToken = "refresh-token";
+        boolean expectedResult = true;
+        given(jwtTokenQueryService.isRefreshTokenValid(refreshToken)).willReturn(expectedResult);
+
+        // when & then
+        mvc.perform(
+                        get("/api/v1/auth/refresh-token/validity")
+                                .header(API_MINOR_VERSION_HEADER_NAME, 1)
+                                .param("refreshToken", refreshToken)
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.validity").value(expectedResult));
+    }
+
     private void verifyEveryMocksShouldHaveNoMoreInteractions() {
         then(memberCommandService).shouldHaveNoMoreInteractions();
         then(memberQueryService).shouldHaveNoMoreInteractions();
         then(jwtTokenCommandService).shouldHaveNoMoreInteractions();
+        then(jwtTokenQueryService).shouldHaveNoMoreInteractions();
     }
 
     private MemberDto createMemberDto(Long memberId, String socialUid) {

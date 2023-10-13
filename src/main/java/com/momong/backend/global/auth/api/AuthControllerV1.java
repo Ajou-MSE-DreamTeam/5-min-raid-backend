@@ -8,19 +8,20 @@ import com.momong.backend.global.auth.dto.request.RefreshAccessAndRefreshTokensR
 import com.momong.backend.global.auth.dto.request.UnityLoginRequest;
 import com.momong.backend.global.auth.dto.response.AccessAndRefreshTokensResponse;
 import com.momong.backend.global.auth.dto.response.LoginResponse;
+import com.momong.backend.global.auth.dto.response.TokenValidationResponse;
 import com.momong.backend.global.auth.service.JwtTokenCommandService;
+import com.momong.backend.global.auth.service.JwtTokenQueryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.Optional;
@@ -29,6 +30,7 @@ import static com.momong.backend.global.common.constant.GlobalConstants.API_MINO
 
 @Tag(name = "로그인 등 인증 관련")
 @RequiredArgsConstructor
+@Validated
 @RequestMapping("/api/v1/auth")
 @RestController
 public class AuthControllerV1 {
@@ -36,6 +38,7 @@ public class AuthControllerV1 {
     private final MemberCommandService memberCommandService;
     private final MemberQueryService memberQueryService;
     private final JwtTokenCommandService jwtTokenCommandService;
+    private final JwtTokenQueryService jwtTokenQueryService;
 
     @Operation(
             summary = "Unity login",
@@ -88,5 +91,24 @@ public class AuthControllerV1 {
     public AccessAndRefreshTokensResponse refreshAccessAndRefreshTokensV1_1(@RequestBody @Valid RefreshAccessAndRefreshTokensRequest request) {
         AccessAndRefreshTokensInfoDto accessAndRefreshTokensInfoDto = jwtTokenCommandService.refreshAccessAndRefreshToken(request.getRefreshToken());
         return AccessAndRefreshTokensResponse.from(accessAndRefreshTokensInfoDto);
+    }
+
+    @Operation(
+            summary = "Refresh token 유효성 검사",
+            description = """
+                    <p><strong>Latest version: v1.1</strong>
+                    <p>Refresh token의 유효성을 확인합니다.</p>
+                    <p>유효하지 않은 refresh token이란 다음과 같은 경우를 말합니다.</p>
+                    <ul>
+                        <li>Refresh token의 값이 잘못된 경우</li>
+                        <li>Refresh token이 만료된 경우</li>
+                        <li>Refresh token의 발행 기록을 찾을 수 없는 경우</li>
+                    </ul>
+                    """
+    )
+    @GetMapping(value = "/refresh-token/validity", headers = API_MINOR_VERSION_HEADER_NAME + "=1")
+    public TokenValidationResponse isRefreshTokenValidV1_1(@RequestParam @NotBlank String refreshToken) {
+        boolean validity = jwtTokenQueryService.isRefreshTokenValid(refreshToken);
+        return new TokenValidationResponse(validity);
     }
 }
