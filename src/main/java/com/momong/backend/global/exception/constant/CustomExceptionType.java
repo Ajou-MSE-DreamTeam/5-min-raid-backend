@@ -31,6 +31,8 @@ public enum CustomExceptionType {
      * 회원({@link Member}) 관련 예외
      */
     MEMBER_NOT_FOUND(2000, "회원을 찾을 수 없습니다."),
+    INVALID_MEMBER_NICKNAME(2001, "유효하지 않은 닉네임입니다. 닉네임은 2~12 글자의 영어, 한글, 숫자만 사용할 수 있습니다."),
+    MEMBER_NICKNAME_DUPLICATION(2002, "이미 사용중인 닉네임입니다."),
     ;
 
     private final Integer code;

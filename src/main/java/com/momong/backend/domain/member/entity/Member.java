@@ -50,4 +50,8 @@ public class Member extends BaseTimeEntity {
     public static Member createNewMember(String socialUid) {
         return new Member(null, socialUid, Set.of(RoleType.USER), null, null, null);
     }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
 }
