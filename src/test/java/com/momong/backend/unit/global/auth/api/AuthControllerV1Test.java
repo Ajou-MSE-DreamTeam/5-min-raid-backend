@@ -1,7 +1,7 @@
 package com.momong.backend.unit.global.auth.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.momong.backend.config.ApiTestConfig;
+import com.momong.backend.config.ControllerTestConfig;
 import com.momong.backend.domain.member.constant.RoleType;
 import com.momong.backend.domain.member.dto.MemberDto;
 import com.momong.backend.domain.member.service.MemberCommandService;
@@ -35,7 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DisplayName("[Unit] Controller - Auth")
-@Import(ApiTestConfig.class)
+@Import(ControllerTestConfig.class)
 @WebMvcTest(controllers = AuthControllerV1.class)
 class AuthControllerV1Test {
 
@@ -153,6 +153,8 @@ class AuthControllerV1Test {
                 .andExpect(jsonPath("$.accessToken.expiresAt").value("2023-01-01T00:00:00"))
                 .andExpect(jsonPath("$.refreshToken.token").value(expectedRefreshToken.token()))
                 .andExpect(jsonPath("$.refreshToken.expiresAt").value("2023-12-31T23:59:00"));
+        then(jwtTokenCommandService).should().refreshAccessAndRefreshToken(request.getRefreshToken());
+        verifyEveryMocksShouldHaveNoMoreInteractions();
     }
 
     @DisplayName("Refresh token이 주어지고, 주어진 refresh token의 유효성을 검사하면, 유효함 여부를 반환한다.")
@@ -171,6 +173,8 @@ class AuthControllerV1Test {
                 )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.validity").value(expectedResult));
+        then(jwtTokenQueryService).should().isRefreshTokenValid(refreshToken);
+        verifyEveryMocksShouldHaveNoMoreInteractions();
     }
 
     private void verifyEveryMocksShouldHaveNoMoreInteractions() {

@@ -6,5 +6,5 @@ import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 
 @MockBean(JpaMetamodelMappingContext.class)
 @Import(TestSecurityConfig.class)
-public class ApiTestConfig {
+public class ControllerTestConfig {
 }
