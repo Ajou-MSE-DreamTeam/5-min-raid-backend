@@ -39,8 +39,8 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
     /**
      * Exception 정보를 입력받아 응답할 error response를 설정한다.
      *
-     * @param classType Exception의 class type
-     * @param response  HttpServletResponse 객체
+     * @param exceptionType exception type
+     * @param response      HttpServletResponse 객체
      */
     private void setErrorResponse(
             CustomExceptionType exceptionType,

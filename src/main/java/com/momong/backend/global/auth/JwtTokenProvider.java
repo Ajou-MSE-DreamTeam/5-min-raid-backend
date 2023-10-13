@@ -10,7 +10,6 @@ import io.jsonwebtoken.security.SignatureException;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,7 +22,6 @@ import java.security.Key;
 import java.sql.Timestamp;
 import java.util.Date;
 
-@Slf4j
 @RequiredArgsConstructor
 @Component
 public class JwtTokenProvider {
