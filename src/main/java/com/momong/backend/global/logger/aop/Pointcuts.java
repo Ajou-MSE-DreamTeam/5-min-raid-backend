@@ -4,15 +4,15 @@ import org.aspectj.lang.annotation.Pointcut;
 
 public class Pointcuts {
 
-    @Pointcut("execution(* com.momong.backend.controller..*(..))")
+    @Pointcut("execution(* com.momong.backend.*..api..*(..))")
     public void controllerPoint() {
     }
 
-    @Pointcut("execution(* com.momong.backend.service..*(..))")
+    @Pointcut("execution(* com.momong.backend.*..service..*(..))")
     public void servicePoint() {
     }
 
-    @Pointcut("execution(* com.momong.backend.repository..*(..))")
+    @Pointcut("execution(* com.momong.backend.*..repository..*(..))")
     public void repositoryPoint() {
     }
 }
