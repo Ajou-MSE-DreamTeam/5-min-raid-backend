@@ -1,5 +1,6 @@
 package com.momong.backend.domain.member.dto.request;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -12,6 +13,7 @@ import org.hibernate.validator.constraints.Length;
 @Getter
 public class UpdateMemberNicknameRequest {
 
+    @Schema(description = "변경하고자 하는 닉네임", example = "nickname")
     @Length(min = 2, max = 12)
     @NotBlank
     private String nickname;
