@@ -94,13 +94,26 @@ class MemberCommandServiceTest {
         assertThat(t).isInstanceOf(InvalidMemberNicknameException.class);
     }
 
-    @DisplayName("제한된 글자수에 맞지 않는 닉네임이 주어지고, 회원 닉네임을 수정하면, 예외가 발생한다.")
+    @DisplayName("제한된 글자수에 맞지 않는(두 글자 미만) 닉네임이 주어지고, 회원 닉네임을 수정하면, 예외가 발생한다.")
     @Test
-    void givenNicknameNotFitCharacterCountLimit_whenUpdateMemberNickname_thenThrowInvalidMemberNicknameException() {
+    void givenNicknameOfLessThanTwoCharacters_whenUpdateMemberNickname_thenThrowInvalidMemberNicknameException() {
         // given
 
         // when
         Throwable t = catchThrowable(() -> sut.updateMemberNickname(1L, "1"));
+
+        // then
+        verifyEveryMocksShouldHaveNoMoreInteractions();
+        assertThat(t).isInstanceOf(InvalidMemberNicknameException.class);
+    }
+
+    @DisplayName("제한된 글자수에 맞지 않는(12 글자 초과) 닉네임이 주어지고, 회원 닉네임을 수정하면, 예외가 발생한다.")
+    @Test
+    void givenNicknameOfGreaterThanTwoCharacters_whenUpdateMemberNickname_thenThrowInvalidMemberNicknameException() {
+        // given
+
+        // when
+        Throwable t = catchThrowable(() -> sut.updateMemberNickname(1L, "123456789012345"));
 
         // then
         verifyEveryMocksShouldHaveNoMoreInteractions();
