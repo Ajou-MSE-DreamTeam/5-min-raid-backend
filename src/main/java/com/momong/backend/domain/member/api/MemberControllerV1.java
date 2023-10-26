@@ -4,7 +4,7 @@ import com.momong.backend.domain.member.dto.MemberDto;
 import com.momong.backend.domain.member.dto.request.UpdateMemberNicknameRequest;
 import com.momong.backend.domain.member.dto.response.MemberResponse;
 import com.momong.backend.domain.member.service.MemberCommandService;
-import com.momong.backend.global.security.UserPrincipal;
+import com.momong.backend.global.auth.UserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

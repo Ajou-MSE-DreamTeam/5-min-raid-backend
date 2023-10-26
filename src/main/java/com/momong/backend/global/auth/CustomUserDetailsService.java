@@ -1,4 +1,4 @@
-package com.momong.backend.global.security;
+package com.momong.backend.global.auth;
 
 import com.momong.backend.domain.member.service.MemberQueryService;
 import org.springframework.context.annotation.Bean;

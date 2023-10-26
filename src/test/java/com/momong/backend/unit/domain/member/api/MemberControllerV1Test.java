@@ -7,7 +7,7 @@ import com.momong.backend.domain.member.constant.RoleType;
 import com.momong.backend.domain.member.dto.MemberDto;
 import com.momong.backend.domain.member.dto.request.UpdateMemberNicknameRequest;
 import com.momong.backend.domain.member.service.MemberCommandService;
-import com.momong.backend.global.security.UserPrincipal;
+import com.momong.backend.global.auth.UserPrincipal;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

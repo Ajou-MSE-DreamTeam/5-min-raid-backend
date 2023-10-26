@@ -1,6 +1,6 @@
 package com.momong.backend.global.config;
 
-import com.momong.backend.global.security.UserPrincipal;
+import com.momong.backend.global.auth.UserPrincipal;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
