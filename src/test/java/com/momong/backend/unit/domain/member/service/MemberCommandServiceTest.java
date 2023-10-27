@@ -148,9 +148,7 @@ class MemberCommandServiceTest {
                 memberId,
                 socialUid,
                 roleTypes,
-                nickname,
-                LocalDateTime.of(2023, 1, 1, 0, 0),
-                LocalDateTime.of(2023, 1, 1, 0, 0)
+                nickname
         );
     }
 }

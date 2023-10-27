@@ -7,12 +7,13 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.Set;
 
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Table(indexes = {
@@ -39,16 +40,8 @@ public class Member extends BaseTimeEntity {
     @Column(unique = true)
     private String nickname;
 
-    public Member(Long id, String socialUid, Set<RoleType> roleTypes, String nickname, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        super(createdAt, updatedAt);
-        this.id = id;
-        this.socialUid = socialUid;
-        this.roleTypes = roleTypes;
-        this.nickname = nickname;
-    }
-
     public static Member createNewMember(String socialUid) {
-        return new Member(null, socialUid, Set.of(RoleType.USER), null, null, null);
+        return new Member(null, socialUid, Set.of(RoleType.USER), null);
     }
 
     public void setNickname(String nickname) {

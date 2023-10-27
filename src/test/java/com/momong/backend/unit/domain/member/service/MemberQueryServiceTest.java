@@ -136,9 +136,7 @@ class MemberQueryServiceTest {
                 memberId,
                 socialUid,
                 Set.of(RoleType.USER),
-                socialUid,
-                LocalDateTime.of(2023, 1, 1, 0, 0),
-                LocalDateTime.of(2023, 1, 1, 0, 0)
+                socialUid
         );
     }
 }
