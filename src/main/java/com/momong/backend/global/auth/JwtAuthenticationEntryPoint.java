@@ -31,7 +31,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
      */
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authenticationException) throws IOException {
-        log.error(
+        log.warn(
                 "[{}] JwtAuthenticationEntryPoint.commence() ex={}",
                 LogUtils.getLogTraceId(),
                 ExceptionUtils.getExceptionStackTrace(authenticationException)
