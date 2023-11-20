@@ -1,6 +1,7 @@
 package com.momong.backend.global.exception.constant;
 
 import com.momong.backend.domain.game_record.entity.GameRecord;
+import com.momong.backend.domain.game_record.service.GameRecordCommandService;
 import com.momong.backend.domain.member.entity.Member;
 import com.momong.backend.domain.member_game_record.entity.*;
 import lombok.AccessLevel;
@@ -43,6 +44,8 @@ public enum CustomExceptionType {
     PERKS_DUPLICATE(2100, "중복된 perk이 있습니다."),
     INVALID_GUARDIAN_PERKS_SIZE(2101, String.format("가디언이 선택한 perk 개수가 유효하지 않습니다. 가디언은 반드시 %d개의 perk을 선택해야 합니다.", GuardianPerkTypes.SELECTABLE_GUARDIAN_PERKS_SIZE)),
     INVALID_MONSTER_PERKS_SIZE(2102, String.format("몬스터가 선택한 perk 개수가 유효하지 않습니다. 몬스터는 반드시 %d개의 perk을 선택해야 합니다.", MonsterPerkTypes.SELECTABLE_MONSTER_PERKS_SIZE)),
+    INVALID_GUARDIAN_GAME_RECORD_SIZE(2103, String.format("기록하고자 하는 가디언의 인게임 정보 개수가 유효하지 않습니다. 한 게임에 가디언은 %d개이므로 동일한 개수의 정보가 필요합니다.", GameRecordCommandService.GUARDIAN_SIZE_REQUIRED)),
+    GUARDIAN_GAME_RECORD_DUPLICATE(2104, "기록하고자 하는 가디언의 인게임 정보 중 중복된 항목이 있습니다."),
     ;
 
     private final Integer code;
