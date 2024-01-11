@@ -33,7 +33,7 @@ public class SwaggerConfig {
     public GroupedOpenApi groupedOpenApiVersion1() {
         return GroupedOpenApi.builder()
                 .group("v1")
-                .packagesToScan("com.momong.backend")
+                .packagesToScan("com.momong.five_min_raid")
                 .pathsToMatch("/api/v1/**")
                 .build();
     }
