@@ -23,6 +23,11 @@ import lombok.Getter;
 public enum CustomExceptionType {
 
     /**
+     * Common
+     */
+    NOT_ADMIN(1001, "관리자 권한이 필요한 기능입니다."),
+
+    /**
      * 로그인, 인증 관련 예외
      */
     ACCESS_DENIED(1500, "접근이 거부되었습니다."),

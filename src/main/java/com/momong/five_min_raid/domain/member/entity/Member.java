@@ -47,4 +47,8 @@ public class Member extends BaseTimeEntity {
     public void setNickname(String nickname) {
         this.nickname = nickname;
     }
+
+    public boolean isAdmin() {
+        return roleTypes.contains(RoleType.ADMIN);
+    }
 }
