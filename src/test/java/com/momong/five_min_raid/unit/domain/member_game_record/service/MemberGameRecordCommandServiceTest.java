@@ -120,7 +120,7 @@ class MemberGameRecordCommandServiceTest {
                 member,
                 gameRecord,
                 MonsterType.PIGEON,
-                List.of(TEMP1, TEMP2, TEMP3),
+                List.of(PHASE1_ENHANCE, PHASE2_DEATH_MARK, PHASE3_FIELD_ATTACK),
                 500,
                 300
         );
@@ -136,7 +136,7 @@ class MemberGameRecordCommandServiceTest {
                 member,
                 gameRecord,
                 MonsterType.PIGEON,
-                MonsterPerkTypes.create(List.of(TEMP1, TEMP2, TEMP3)),
+                MonsterPerkTypes.create(List.of(PHASE1_ENHANCE, PHASE2_DEATH_MARK, PHASE3_FIELD_ATTACK)),
                 500,
                 300
         );
