@@ -111,7 +111,7 @@ class GameRecordControllerV1Test {
         return new SaveMonsterGameRecordRequest(
                 memberId,
                 MonsterType.PIGEON,
-                List.of(TEMP1, TEMP2, TEMP3),
+                List.of(PHASE1_ENHANCE, PHASE2_DEATH_MARK, PHASE3_FIELD_ATTACK),
                 300,
                 500
         );

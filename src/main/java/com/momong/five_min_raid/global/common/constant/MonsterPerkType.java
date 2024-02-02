@@ -1,9 +1,46 @@
 package com.momong.five_min_raid.global.common.constant;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import org.springframework.lang.Nullable;
+import org.springframework.util.StringUtils;
+
 public enum MonsterPerkType {
 
-    // TODO: 추후 client 개발팀에서 목록 받은 후 작성 필요
-    TEMP1,
-    TEMP2,
-    TEMP3
+    PHASE1_PREDATION,
+    PHASE1_ENHANCE,
+
+    PHASE2_PROTECTION_TOTEM,
+    PHASE2_DEATH_MARK,
+
+    PHASE3_FIELD_ATTACK,
+    PHASE3_MAGNETIC_FIELD,
+    ;
+
+    private final String noUnderscoreName;
+
+    MonsterPerkType() {
+        this.noUnderscoreName = name().replace("_", "");
+    }
+
+    /**
+     * Enum value의 underscore를 무시한 상태로 value of 기능을 수행한다.
+     *
+     * @param value Enum value로 변환하고자 하는 문자열
+     * @return 전달받은 문자열과 일치하는 enum value
+     * @throws IllegalArgumentException 전달받은 문자열에 대해 일치하는 enum value가 없는 경우
+     */
+    @JsonCreator
+    public static MonsterPerkType ignoreUnderscoreValueOf(@Nullable String value) {
+        if (!StringUtils.hasText(value)) {
+            throw new IllegalArgumentException("Invalid value: " + value);
+        }
+        value = value.replace("_", "");
+
+        for (MonsterPerkType perkType : values()) {
+            if (perkType.noUnderscoreName.equalsIgnoreCase(value)) {
+                return perkType;
+            }
+        }
+        throw new IllegalArgumentException(String.format("No matching enum constant for '%s'", value));
+    }
 }
