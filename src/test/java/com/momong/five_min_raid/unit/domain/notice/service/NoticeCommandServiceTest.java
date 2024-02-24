@@ -3,6 +3,7 @@ package com.momong.five_min_raid.unit.domain.notice.service;
 import com.momong.five_min_raid.domain.member.constant.RoleType;
 import com.momong.five_min_raid.domain.member.entity.Member;
 import com.momong.five_min_raid.domain.member.service.MemberQueryService;
+import com.momong.five_min_raid.domain.notice.constant.NoticeType;
 import com.momong.five_min_raid.domain.notice.dto.NoticeDto;
 import com.momong.five_min_raid.domain.notice.dto.request.PostNoticeRequest;
 import com.momong.five_min_raid.domain.notice.entity.Notice;
@@ -105,6 +106,7 @@ class NoticeCommandServiceTest {
     private Notice createNotice(Long id, PostNoticeRequest postNoticeRequest) throws Exception {
         return createNotice(
                 id,
+                postNoticeRequest.getType(),
                 postNoticeRequest.getTitle(),
                 postNoticeRequest.getContent(),
                 postNoticeRequest.getStartAt(),
@@ -112,14 +114,15 @@ class NoticeCommandServiceTest {
         );
     }
 
-    private Notice createNotice(Long id, String title, String content, LocalDateTime startedAt, LocalDateTime expiresAt) throws Exception {
-        Constructor<Notice> noticeConstructor = Notice.class.getDeclaredConstructor(Long.class, String.class, String.class, LocalDateTime.class, LocalDateTime.class);
+    private Notice createNotice(Long id, NoticeType type, String title, String content, LocalDateTime startedAt, LocalDateTime expiresAt) throws Exception {
+        Constructor<Notice> noticeConstructor = Notice.class.getDeclaredConstructor(Long.class, NoticeType.class, String.class, String.class, LocalDateTime.class, LocalDateTime.class);
         noticeConstructor.setAccessible(true);
-        return noticeConstructor.newInstance(id, title, content, startedAt, expiresAt);
+        return noticeConstructor.newInstance(id, type, title, content, startedAt, expiresAt);
     }
 
     private PostNoticeRequest createPostNoticeRequest() {
         return new PostNoticeRequest(
+                NoticeType.NOTICE,
                 "title",
                 "content",
                 LocalDateTime.of(2024, 1, 1, 0, 0),

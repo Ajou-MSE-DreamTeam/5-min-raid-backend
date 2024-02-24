@@ -5,6 +5,7 @@ import com.momong.five_min_raid.config.ControllerTestConfig;
 import com.momong.five_min_raid.domain.member.constant.RoleType;
 import com.momong.five_min_raid.domain.member.dto.MemberDto;
 import com.momong.five_min_raid.domain.notice.api.NoticeControllerV1;
+import com.momong.five_min_raid.domain.notice.constant.NoticeType;
 import com.momong.five_min_raid.domain.notice.dto.NoticeDto;
 import com.momong.five_min_raid.domain.notice.dto.request.PostNoticeRequest;
 import com.momong.five_min_raid.domain.notice.service.NoticeCommandService;
@@ -117,6 +118,7 @@ class NoticeControllerV1Test {
 
     private static PostNoticeRequest createPostNoticeRequest() {
         return new PostNoticeRequest(
+                NoticeType.NOTICE,
                 "title",
                 "contents...",
                 LocalDateTime.of(2024, 1, 1, 1, 1, 1),

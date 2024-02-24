@@ -1,5 +1,6 @@
 package com.momong.five_min_raid.domain.notice.dto.request;
 
+import com.momong.five_min_raid.domain.notice.constant.NoticeType;
 import com.momong.five_min_raid.domain.notice.entity.Notice;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -15,6 +16,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 public class PostNoticeRequest {
+
+    @Schema(description = "공지 종류")
+    @NotNull
+    private NoticeType type;
 
     @Schema(description = "제목", example = "0.0.1 업데이트 공지")
     @NotBlank
@@ -33,6 +38,6 @@ public class PostNoticeRequest {
     private LocalDateTime expiresAt;
 
     public Notice toEntity() {
-        return Notice.create(title, content, startAt, expiresAt);
+        return Notice.create(type, title, content, startAt, expiresAt);
     }
 }

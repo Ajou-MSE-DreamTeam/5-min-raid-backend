@@ -1,5 +1,6 @@
 package com.momong.five_min_raid.domain.notice.entity;
 
+import com.momong.five_min_raid.domain.notice.constant.NoticeType;
 import com.momong.five_min_raid.global.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -25,6 +26,10 @@ public class Notice extends BaseEntity {
     @Column(name = "member_id", nullable = false)
     private Long id;
 
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private NoticeType type;
+
     @NotBlank
     private String title;
 
@@ -39,11 +44,12 @@ public class Notice extends BaseEntity {
     private LocalDateTime expiresAt;
 
     public static Notice create(
+            @NotNull NoticeType type,
             @NotBlank String title,
             @NotBlank String content,
             @NotNull LocalDateTime startAt,
             @NotNull LocalDateTime expiresAt
     ) {
-        return new Notice(null, title, content, startAt, expiresAt);
+        return new Notice(null, type, title, content, startAt, expiresAt);
     }
 }
