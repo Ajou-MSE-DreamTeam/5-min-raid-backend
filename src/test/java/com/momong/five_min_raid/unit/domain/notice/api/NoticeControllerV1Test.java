@@ -9,6 +9,7 @@ import com.momong.five_min_raid.domain.notice.constant.NoticeType;
 import com.momong.five_min_raid.domain.notice.dto.NoticeDto;
 import com.momong.five_min_raid.domain.notice.dto.request.PostNoticeRequest;
 import com.momong.five_min_raid.domain.notice.service.NoticeCommandService;
+import com.momong.five_min_raid.domain.notice.service.NoticeQueryService;
 import com.momong.five_min_raid.global.auth.UserPrincipal;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,16 +22,20 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 import static com.momong.five_min_raid.domain.member.constant.RoleType.ADMIN;
 import static com.momong.five_min_raid.domain.member.constant.RoleType.USER;
 import static com.momong.five_min_raid.global.common.constant.GlobalConstants.API_MINOR_VERSION_HEADER_NAME;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.verify;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -42,6 +47,9 @@ class NoticeControllerV1Test {
 
     @MockBean
     private NoticeCommandService noticeCommandService;
+
+    @MockBean
+    private NoticeQueryService noticeQueryService;
 
     private final MockMvc mvc;
     private final ObjectMapper mapper;
@@ -95,8 +103,28 @@ class NoticeControllerV1Test {
         verifyEveryMocksShouldHaveNoMoreInteractions();
     }
 
+    @Test
+    void 현재_게시중인_공지_목록을_조회한다() throws Exception {
+        // given
+        List<NoticeDto> expectedResult = List.of(createNoticeDto(1L));
+        given(noticeQueryService.findActiveNotices(any(LocalDateTime.class))).willReturn(expectedResult);
+
+        // when & then
+        mvc.perform(
+                        get("/api/v1/notices")
+                                .header(API_MINOR_VERSION_HEADER_NAME, 1)
+                                .with(user(createTestUserDetails(1L)))
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.notices").isArray())
+                .andExpect(jsonPath("$.notices", hasSize(expectedResult.size())));
+        then(noticeQueryService).should().findActiveNotices(any(LocalDateTime.class));
+        verifyEveryMocksShouldHaveNoMoreInteractions();
+    }
+
     private void verifyEveryMocksShouldHaveNoMoreInteractions() {
         then(noticeCommandService).shouldHaveNoMoreInteractions();
+        then(noticeQueryService).shouldHaveNoMoreInteractions();
     }
 
     private UserDetails createTestUserDetails(Long memberId) {
