@@ -36,13 +36,13 @@ class NoticeQueryServiceTest {
         // given
         LocalDateTime time = LocalDateTime.now();
         List<Notice> expectedResult = List.of(createNotice(1L));
-        given(noticeRepository.findAllByStartAtAfterAndExpiresAtBefore(time, time)).willReturn(expectedResult);
+        given(noticeRepository.findAllByStartAtBeforeAndExpiresAtAfter(time, time)).willReturn(expectedResult);
 
         // when
         List<NoticeDto> actualResult = sut.findActiveNotices(time);
 
         // then
-        then(noticeRepository).should().findAllByStartAtAfterAndExpiresAtBefore(time, time);
+        then(noticeRepository).should().findAllByStartAtBeforeAndExpiresAtAfter(time, time);
         verifyEveryMocksShouldHaveNoMoreInteractions();
         assertThat(actualResult).hasSize(expectedResult.size());
     }

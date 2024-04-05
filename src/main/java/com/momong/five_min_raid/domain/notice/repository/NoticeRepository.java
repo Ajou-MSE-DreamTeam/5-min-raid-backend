@@ -9,5 +9,5 @@ import java.util.List;
 public interface NoticeRepository extends JpaRepository<Notice, Long> {
 
     // TODO: Querydsl custom query method로 구현 변경 예정
-    List<Notice> findAllByStartAtAfterAndExpiresAtBefore(LocalDateTime currentTime1, LocalDateTime currentTime2);
+    List<Notice> findAllByStartAtBeforeAndExpiresAtAfter(LocalDateTime currentTime1, LocalDateTime currentTime2);
 }

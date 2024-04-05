@@ -24,7 +24,7 @@ public class NoticeQueryService {
      */
     public List<NoticeDto> findActiveNotices(LocalDateTime time) {
         return noticeRepository
-                .findAllByStartAtAfterAndExpiresAtBefore(time, time)
+                .findAllByStartAtBeforeAndExpiresAtAfter(time, time)
                 .stream()
                 .map(NoticeDto::from)
                 .toList();
