@@ -157,6 +157,7 @@ class NoticeControllerV1Test {
     private static NoticeDto createNoticeDto(Long noticeId) {
         return new NoticeDto(
                 noticeId,
+                NoticeType.NOTICE,
                 "title",
                 "contents...",
                 LocalDateTime.of(2024, 1, 1, 1, 1, 1),

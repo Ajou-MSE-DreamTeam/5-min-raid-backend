@@ -1,5 +1,6 @@
 package com.momong.five_min_raid.domain.notice.dto;
 
+import com.momong.five_min_raid.domain.notice.constant.NoticeType;
 import com.momong.five_min_raid.domain.notice.entity.Notice;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 public class NoticeDto {
 
     private Long id;
+    private NoticeType type;
     private String title;
     private String content;
     private LocalDateTime startAt;
@@ -22,6 +24,7 @@ public class NoticeDto {
     public static NoticeDto from(Notice notice) {
         return new NoticeDto(
                 notice.getId(),
+                notice.getType(),
                 notice.getTitle(),
                 notice.getContent(),
                 notice.getStartAt(),
