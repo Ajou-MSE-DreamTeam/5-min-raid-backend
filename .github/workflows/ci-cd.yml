@@ -47,7 +47,7 @@ jobs:
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.AWS_EC2_HOST_PROD }}
-          username: ubuntu
+          username: ${{ secrets.AWS_EC2_USERNAME }}
           key: ${{ secrets.AWS_EC2_KEY_PROD }}
           script: |
             cd /home/ubuntu/backend
