@@ -38,7 +38,8 @@ public class SecurityConfig {
     };
 
     private static final Map<String, HttpMethod> ADMIN_AUTH_LIST = Map.of(
-            "/api/v*/notices", HttpMethod.POST
+            "/api/v*/notices", HttpMethod.POST,
+            "/api/v*/client-versions/latest", HttpMethod.GET
     );
 
     @Bean
