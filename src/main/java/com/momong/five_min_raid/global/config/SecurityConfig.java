@@ -34,7 +34,8 @@ public class SecurityConfig {
             "/v3/api-docs/**",
             "/api/v*/auth/login/**",
             "/api/v*/auth/tokens/refresh",
-            "/api/v*/auth/refresh-token/validity"
+            "/api/v*/auth/refresh-token/validity",
+            "/api/v*/client-versions/latest"    // TODO: 추후 GET만 허용하도록 수정 필요
     };
 
     private static final Map<String, HttpMethod> ADMIN_AUTH_LIST = Map.of(
