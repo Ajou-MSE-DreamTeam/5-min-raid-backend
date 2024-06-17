@@ -61,6 +61,23 @@ class ClientVersionServiceTest {
         then(clientVersionRepository).shouldHaveNoMoreInteractions();
     }
 
+    @DisplayName("버전이 주어지고, 최신 클라이언트 버전을 수정하면, 수정된 버전이 반환된다.")
+    @Test
+    void givenVersion_whenUpdateLatestClientVersion_thenUpdatedAndReturnLatestClientVersion() throws Exception {
+        // given
+        String expectedResult = "1.0.1";
+        given(clientVersionRepository.findTop1ByOrderByCreatedAtDesc())
+                .willReturn(Optional.of(createClientVersion("1.0.0")));
+
+        // when
+        String actualResult = sut.updateLatestClientVersion(expectedResult);
+
+        // then
+        assertThat(actualResult).isEqualTo(expectedResult);
+        then(clientVersionRepository).should().findTop1ByOrderByCreatedAtDesc();
+        then(clientVersionRepository).shouldHaveNoMoreInteractions();
+    }
+
     private ClientVersion createClientVersion(String version) throws Exception {
         Constructor<ClientVersion> constructor = ClientVersion.class.getDeclaredConstructor(Long.class, String.class);
         constructor.setAccessible(true);
