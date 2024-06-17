@@ -34,12 +34,16 @@ public class SecurityConfig {
             "/v3/api-docs/**",
             "/api/v*/auth/login/**",
             "/api/v*/auth/tokens/refresh",
-            "/api/v*/auth/refresh-token/validity",
-            "/api/v*/client-versions/latest"    // TODO: 추후 GET만 허용하도록 수정 필요
+            "/api/v*/auth/refresh-token/validity"
     };
 
+    private static final Map<String, HttpMethod> AUTH_WHITE_LIST = Map.of(
+            "/api/v*/client-versions/latest", HttpMethod.GET
+    );
+
     private static final Map<String, HttpMethod> ADMIN_AUTH_LIST = Map.of(
-            "/api/v*/notices", HttpMethod.POST
+            "/api/v*/notices", HttpMethod.POST,
+            "/api/v*/client-versions/latest", HttpMethod.PUT
     );
 
     @Bean
@@ -52,6 +56,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll();
                     auth.requestMatchers(AUTH_WHITE_PATHS).permitAll();
+                    AUTH_WHITE_LIST.forEach((path, httpMethod) -> auth.requestMatchers(httpMethod, path).permitAll());
                     ADMIN_AUTH_LIST.forEach((path, httpMethod) -> auth.requestMatchers(httpMethod, path).hasAnyRole(RoleType.ADMIN.name()));
                     auth.anyRequest().authenticated();
                 })

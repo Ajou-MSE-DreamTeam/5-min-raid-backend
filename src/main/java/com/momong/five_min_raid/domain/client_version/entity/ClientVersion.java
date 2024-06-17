@@ -21,4 +21,8 @@ public class ClientVersion extends BaseTimeEntity {
 
     @NotNull
     private String version;
+
+    public void updateVersion(String version) {
+        this.version = version;
+    }
 }
