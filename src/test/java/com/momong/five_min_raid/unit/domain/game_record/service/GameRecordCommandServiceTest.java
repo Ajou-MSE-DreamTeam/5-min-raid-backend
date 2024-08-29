@@ -173,7 +173,7 @@ class GameRecordCommandServiceTest {
         return new SaveGuardianGameRecordRequest(
                 memberId,
                 GuardianType.SHIELDER,
-                List.of(DEFENSE_DODGE, DEFENSE_SHIELD, ATTACK_CHARGE_ATTACK),
+                List.of(DEFENSE_REDUCTION, DEFENSE_SHIELD, ATTACK_CHARGE_ATTACK),
                 100,
                 150,
                 0,
