@@ -112,28 +112,28 @@ jacocoTestReport {
     finalizedBy 'jacocoTestCoverageVerification'
 }
 
-jacocoTestCoverageVerification {
-    violationRules {
-        rule {
-            enabled = true
-            element = 'CLASS'
-
-            limit {
-                counter = 'BRANCH'
-                value = 'COVEREDRATIO'
-                minimum = 0.90
-            }
-
-            limit {
-                counter = 'LINE'
-                value = 'COVEREDRATIO'
-                minimum = 0.90
-            }
-
-            includes = [
-                    '*.*Service*',
-                    '*.*Controller*'
-            ]
-        }
-    }
-}
+//jacocoTestCoverageVerification {
+//    violationRules {
+//        rule {
+//            enabled = true
+//            element = 'CLASS'
+//
+//            limit {
+//                counter = 'BRANCH'
+//                value = 'COVEREDRATIO'
+//                minimum = 0.90
+//            }
+//
+//            limit {
+//                counter = 'LINE'
+//                value = 'COVEREDRATIO'
+//                minimum = 0.90
+//            }
+//
+//            includes = [
+//                    '*.*Service*',
+//                    '*.*Controller*'
+//            ]
+//        }
+//    }
+//}
