@@ -1,6 +1,8 @@
 package com.momong.five_min_raid.domain.member_game_record.service;
 
+import com.momong.five_min_raid.domain.member.entity.Member;
 import com.momong.five_min_raid.domain.member_game_record.entity.GuardianGameRecord;
+import com.momong.five_min_raid.domain.member_game_record.entity.MemberGameRecord;
 import com.momong.five_min_raid.domain.member_game_record.entity.MonsterGameRecord;
 import com.momong.five_min_raid.domain.member_game_record.repository.MemberGameRecordRepository;
 import lombok.RequiredArgsConstructor;
@@ -10,9 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collection;
 
 @RequiredArgsConstructor
-@Transactional
 @Service
-public class MemberGameRecordCommandService {
+public class MemberGameRecordService {
 
     private final MemberGameRecordRepository memberGameRecordRepository;
 
@@ -21,6 +22,7 @@ public class MemberGameRecordCommandService {
      *
      * @param monsterGameRecord 저장하고자 하는 MonsterGameRecord entity
      */
+    @Transactional
     public void saveMonsterGameRecord(MonsterGameRecord monsterGameRecord) {
         memberGameRecordRepository.save(monsterGameRecord);
     }
@@ -30,7 +32,14 @@ public class MemberGameRecordCommandService {
      *
      * @param guardianGameRecords 저장하고자 하는 GuardianGameRecord entities
      */
+    @Transactional
     public void saveGuardianGameRecords(Collection<GuardianGameRecord> guardianGameRecords) {
         memberGameRecordRepository.saveAll(guardianGameRecords);
+    }
+
+    @Transactional
+    public void removeMemberFromRecords(Member member) {
+        memberGameRecordRepository.findByMember(member)
+                .forEach(MemberGameRecord::removeMember);
     }
 }

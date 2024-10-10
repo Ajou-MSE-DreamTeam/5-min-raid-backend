@@ -14,7 +14,7 @@ import com.momong.five_min_raid.domain.member_game_record.dto.request.SaveGuardi
 import com.momong.five_min_raid.domain.member_game_record.dto.request.SaveMonsterGameRecordRequest;
 import com.momong.five_min_raid.domain.member_game_record.entity.GuardianGameRecord;
 import com.momong.five_min_raid.domain.member_game_record.entity.MonsterGameRecord;
-import com.momong.five_min_raid.domain.member_game_record.service.MemberGameRecordCommandService;
+import com.momong.five_min_raid.domain.member_game_record.service.MemberGameRecordService;
 import com.momong.five_min_raid.global.common.constant.GuardianType;
 import com.momong.five_min_raid.global.common.constant.MonsterType;
 import com.momong.five_min_raid.global.common.constant.TeamType;
@@ -48,7 +48,7 @@ class GameRecordCommandServiceTest {
     @Mock
     private MemberQueryService memberQueryService;
     @Mock
-    private MemberGameRecordCommandService memberGameRecordCommandService;
+    private MemberGameRecordService memberGameRecordService;
     @Mock
     private GameRecordRepository gameRecordRepository;
 
@@ -63,11 +63,11 @@ class GameRecordCommandServiceTest {
         GameRecord expectedResult = createGameRecord(gameRecordId);
         given(gameRecordRepository.save(any(GameRecord.class))).willReturn(expectedResult);
         given(memberQueryService.getById(monsterMemberId)).willReturn(createMember(monsterMemberId));
-        willDoNothing().given(memberGameRecordCommandService).saveMonsterGameRecord(any(MonsterGameRecord.class));
+        willDoNothing().given(memberGameRecordService).saveMonsterGameRecord(any(MonsterGameRecord.class));
         guardianMemberIds.forEach(
                 id -> given(memberQueryService.getById(id)).willReturn(createMember(id))
         );
-        willDoNothing().given(memberGameRecordCommandService).saveGuardianGameRecords(ArgumentMatchers.<List<GuardianGameRecord>>any());
+        willDoNothing().given(memberGameRecordService).saveGuardianGameRecords(ArgumentMatchers.<List<GuardianGameRecord>>any());
 
         // when
         GameRecordDto actualResult = sut.saveGameRecord(saveGameRecordRequest);
@@ -75,11 +75,11 @@ class GameRecordCommandServiceTest {
         // then
         then(gameRecordRepository).should().save(any(GameRecord.class));
         then(memberQueryService).should().getById(monsterMemberId);
-        then(memberGameRecordCommandService).should().saveMonsterGameRecord(any(MonsterGameRecord.class));
+        then(memberGameRecordService).should().saveMonsterGameRecord(any(MonsterGameRecord.class));
         guardianMemberIds.forEach(
                 id -> then(memberQueryService).should().getById(id)
         );
-        then(memberGameRecordCommandService).should().saveGuardianGameRecords(ArgumentMatchers.<List<GuardianGameRecord>>any());
+        then(memberGameRecordService).should().saveGuardianGameRecords(ArgumentMatchers.<List<GuardianGameRecord>>any());
         verifyEveryMocksShouldHaveNoMoreInteractions();
         assertThat(actualResult.getId()).isEqualTo(expectedResult.getId());
         assertThat(actualResult.getWinnerTeam()).isEqualTo(expectedResult.getWinnerTeam());
@@ -98,7 +98,7 @@ class GameRecordCommandServiceTest {
         GameRecord expectedResult = createGameRecord(gameRecordId);
         given(gameRecordRepository.save(any(GameRecord.class))).willReturn(expectedResult);
         given(memberQueryService.getById(monsterMemberId)).willReturn(createMember(monsterMemberId));
-        willDoNothing().given(memberGameRecordCommandService).saveMonsterGameRecord(any(MonsterGameRecord.class));
+        willDoNothing().given(memberGameRecordService).saveMonsterGameRecord(any(MonsterGameRecord.class));
 
         // when
         Throwable t = catchThrowable(() -> sut.saveGameRecord(saveGameRecordRequest));
@@ -106,7 +106,7 @@ class GameRecordCommandServiceTest {
         // then
         then(gameRecordRepository).should().save(any(GameRecord.class));
         then(memberQueryService).should().getById(monsterMemberId);
-        then(memberGameRecordCommandService).should().saveMonsterGameRecord(any(MonsterGameRecord.class));
+        then(memberGameRecordService).should().saveMonsterGameRecord(any(MonsterGameRecord.class));
         verifyEveryMocksShouldHaveNoMoreInteractions();
         assertThat(t).isInstanceOf(InvalidGuardianGameRecordSizeException.class);
     }
@@ -122,7 +122,7 @@ class GameRecordCommandServiceTest {
         GameRecord expectedResult = createGameRecord(gameRecordId);
         given(gameRecordRepository.save(any(GameRecord.class))).willReturn(expectedResult);
         given(memberQueryService.getById(monsterMemberId)).willReturn(createMember(monsterMemberId));
-        willDoNothing().given(memberGameRecordCommandService).saveMonsterGameRecord(any(MonsterGameRecord.class));
+        willDoNothing().given(memberGameRecordService).saveMonsterGameRecord(any(MonsterGameRecord.class));
 
         // when
         Throwable t = catchThrowable(() -> sut.saveGameRecord(saveGameRecordRequest));
@@ -130,14 +130,14 @@ class GameRecordCommandServiceTest {
         // then
         then(gameRecordRepository).should().save(any(GameRecord.class));
         then(memberQueryService).should().getById(monsterMemberId);
-        then(memberGameRecordCommandService).should().saveMonsterGameRecord(any(MonsterGameRecord.class));
+        then(memberGameRecordService).should().saveMonsterGameRecord(any(MonsterGameRecord.class));
         verifyEveryMocksShouldHaveNoMoreInteractions();
         assertThat(t).isInstanceOf(GuardianGameRecordDuplicateException.class);
     }
 
     private void verifyEveryMocksShouldHaveNoMoreInteractions() {
         then(memberQueryService).shouldHaveNoMoreInteractions();
-        then(memberGameRecordCommandService).shouldHaveNoMoreInteractions();
+        then(memberGameRecordService).shouldHaveNoMoreInteractions();
         then(gameRecordRepository).shouldHaveNoMoreInteractions();
     }
 

@@ -3,8 +3,10 @@ package com.momong.five_min_raid.domain.member.service;
 import com.momong.five_min_raid.domain.member.dto.MemberDto;
 import com.momong.five_min_raid.domain.member.entity.Member;
 import com.momong.five_min_raid.domain.member.exception.InvalidMemberNicknameException;
+import com.momong.five_min_raid.domain.member.exception.MemberDeletionPermissionDeniedException;
 import com.momong.five_min_raid.domain.member.exception.MemberNicknameDuplicationException;
 import com.momong.five_min_raid.domain.member.repository.MemberRepository;
+import com.momong.five_min_raid.domain.member_game_record.service.MemberGameRecordService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,8 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @Service
 public class MemberCommandService {
-
     private final MemberQueryService memberQueryService;
+    private final MemberGameRecordService memberGameRecordService;
     private final MemberRepository memberRepository;
 
     /**
@@ -47,6 +49,13 @@ public class MemberCommandService {
         return MemberDto.from(member);
     }
 
+    public void deleteMember(long requestUserId, long deleteMemberId) {
+        checkMemberDeletionPermission(requestUserId, deleteMemberId);
+        Member deleteMember = memberQueryService.getById(deleteMemberId);
+        memberGameRecordService.removeMemberFromRecords(deleteMember);
+        memberRepository.delete(deleteMember);
+    }
+
     /**
      * <p>닉네임의 유효성을 검증한다.
      * <p>닉네임은 2글자 이상, 12글자 이하의 영문, 한글, 숫자로만 구성된다.
@@ -59,6 +68,12 @@ public class MemberCommandService {
             || nickname.length() < 2
             || nickname.length() > 12) {
             throw new InvalidMemberNicknameException(nickname);
+        }
+    }
+
+    private void checkMemberDeletionPermission(long requestUserId, long deleteMemberId) {
+        if (requestUserId != deleteMemberId) {
+            throw new MemberDeletionPermissionDeniedException();
         }
     }
 }

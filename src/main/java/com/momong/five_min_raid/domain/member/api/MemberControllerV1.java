@@ -13,11 +13,9 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static com.momong.five_min_raid.global.common.constant.GlobalConstants.API_MINOR_VERSION_HEADER_NAME;
 
@@ -54,5 +52,21 @@ public class MemberControllerV1 {
     ) {
         MemberDto memberDto = memberCommandService.updateMemberNickname(userPrincipal.getMemberId(), request.getNickname());
         return MemberResponse.from(memberDto);
+    }
+
+    @Operation(
+            summary = "회원 탈퇴",
+            description = "회원 탈퇴(내 계정 삭제)를 진행합니다.",
+            security = @SecurityRequirement(name = "access-token")
+    )
+    @ApiResponses({
+            @ApiResponse(description = "OK", responseCode = "200"),
+            @ApiResponse(description = "[2003] API 요청자와 탈퇴할 회원 정보가 상이한 경우", responseCode = "403", content = @Content),
+    })
+    @DeleteMapping(value = "/me", headers = API_MINOR_VERSION_HEADER_NAME + "=1")
+    public ResponseEntity<Void> deleteMemberV1_1(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+        long requestUserId = userPrincipal.getMemberId();
+        memberCommandService.deleteMember(requestUserId, requestUserId);
+        return ResponseEntity.noContent().build();
     }
 }

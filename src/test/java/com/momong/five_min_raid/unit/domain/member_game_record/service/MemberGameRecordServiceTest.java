@@ -8,7 +8,7 @@ import com.momong.five_min_raid.domain.member_game_record.entity.GuardianPerkTyp
 import com.momong.five_min_raid.domain.member_game_record.entity.MonsterGameRecord;
 import com.momong.five_min_raid.domain.member_game_record.entity.MonsterPerkTypes;
 import com.momong.five_min_raid.domain.member_game_record.repository.MemberGameRecordRepository;
-import com.momong.five_min_raid.domain.member_game_record.service.MemberGameRecordCommandService;
+import com.momong.five_min_raid.domain.member_game_record.service.MemberGameRecordService;
 import com.momong.five_min_raid.global.common.constant.GuardianType;
 import com.momong.five_min_raid.global.common.constant.MonsterType;
 import com.momong.five_min_raid.global.common.constant.TeamType;
@@ -33,10 +33,10 @@ import static org.mockito.BDDMockito.then;
 
 @DisplayName("[Unit] Service(command) - Member game record")
 @ExtendWith(MockitoExtension.class)
-class MemberGameRecordCommandServiceTest {
+class MemberGameRecordServiceTest {
 
     @InjectMocks
-    private MemberGameRecordCommandService sut;
+    private MemberGameRecordService sut;
 
     @Mock
     private MemberGameRecordRepository memberGameRecordRepository;

@@ -10,7 +10,7 @@ import com.momong.five_min_raid.domain.member.entity.Member;
 import com.momong.five_min_raid.domain.member.service.MemberQueryService;
 import com.momong.five_min_raid.domain.member_game_record.dto.request.SaveGuardianGameRecordRequest;
 import com.momong.five_min_raid.domain.member_game_record.dto.request.SaveMonsterGameRecordRequest;
-import com.momong.five_min_raid.domain.member_game_record.service.MemberGameRecordCommandService;
+import com.momong.five_min_raid.domain.member_game_record.service.MemberGameRecordService;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,7 +26,7 @@ public class GameRecordCommandService {
     public static final int GUARDIAN_SIZE_REQUIRED = 3;
 
     private final MemberQueryService memberQueryService;
-    private final MemberGameRecordCommandService memberGameRecordCommandService;
+    private final MemberGameRecordService memberGameRecordService;
     private final GameRecordRepository gameRecordRepository;
 
     /**
@@ -63,7 +63,7 @@ public class GameRecordCommandService {
      */
     private void saveMonsterGameRecord(GameRecord gameRecord, SaveMonsterGameRecordRequest saveMonsterGameRecordRequest) {
         Member member = getMemberById(saveMonsterGameRecordRequest.getMemberId());
-        memberGameRecordCommandService.saveMonsterGameRecord(
+        memberGameRecordService.saveMonsterGameRecord(
                 saveMonsterGameRecordRequest.toEntity(member, gameRecord)
         );
     }
@@ -79,7 +79,7 @@ public class GameRecordCommandService {
     private void saveGuardianGameRecords(GameRecord gameRecord, List<SaveGuardianGameRecordRequest> saveGuardianGameRecordRequests) {
         validateNumOfGuardians(saveGuardianGameRecordRequests);
         validateNoDuplicateGuardians(saveGuardianGameRecordRequests);
-        memberGameRecordCommandService.saveGuardianGameRecords(
+        memberGameRecordService.saveGuardianGameRecords(
                 saveGuardianGameRecordRequests.stream()
                         .map(guardianGameRecordRequest -> {
                             Member member = getMemberById(guardianGameRecordRequest.getMemberId());

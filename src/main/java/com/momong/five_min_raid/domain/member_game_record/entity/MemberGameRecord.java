@@ -23,7 +23,6 @@ public abstract class MemberGameRecord extends BaseTimeEntity {
     @Column(name = "member_game_record_id", nullable = false)
     private Long id;
 
-    @NotNull
     @JoinColumn(name = "member_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
@@ -32,4 +31,8 @@ public abstract class MemberGameRecord extends BaseTimeEntity {
     @JoinColumn(name = "game_record_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private GameRecord gameRecord;
+
+    public void removeMember() {
+        this.member = null;
+    }
 }
