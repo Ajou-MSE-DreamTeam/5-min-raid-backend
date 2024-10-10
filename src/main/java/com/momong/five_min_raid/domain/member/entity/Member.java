@@ -28,11 +28,9 @@ public class Member extends BaseTimeEntity {
     @Column(name = "member_id", nullable = false)
     private Long id;
 
-    @NotBlank
     @Column(nullable = false, unique = true)
     private String socialUid;
 
-    @NotNull
     @Column(nullable = false)
     @Convert(converter = RoleTypesConverter.class)
     private Set<RoleType> roleTypes;
@@ -44,7 +42,7 @@ public class Member extends BaseTimeEntity {
         return new Member(null, socialUid, Set.of(RoleType.USER), null);
     }
 
-    public void setNickname(String nickname) {
+    public void updateNickname(String nickname) {
         this.nickname = nickname;
     }
 

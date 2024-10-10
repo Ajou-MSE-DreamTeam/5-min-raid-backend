@@ -45,7 +45,7 @@ public class MemberCommandService {
         }
 
         Member member = memberQueryService.getById(memberId);
-        member.setNickname(nickname);
+        member.updateNickname(nickname);
         return MemberDto.from(member);
     }
 
