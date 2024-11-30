@@ -29,7 +29,6 @@ public class SaveGameRecordRequest {
     private SaveMonsterGameRecordRequest monster;
 
     @Schema(description = "가디언들의 게임 기록 정보")
-    @Size(min = 3, max = 3)
     @NotNull
     private List<SaveGuardianGameRecordRequest> guardians;
 
