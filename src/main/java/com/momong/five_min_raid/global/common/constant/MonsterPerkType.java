@@ -5,20 +5,20 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.StringUtils;
 
 public enum MonsterPerkType {
-    Phase1_BLOOG_SUCKING,
-    Phase1_GASH,
-    Phase1_LAST_DANCE,
+    PHASE1_BLOOD_SUCKING,
+    PHASE1_GASH,
+    PHASE1_LAST_DANCE,
     PHASE1_ENHANCE,
 
     PHASE2_PROTECTION_TOTEM,
     PHASE2_DEATH_MARK,
-    Phase2_SLEEPING_GAS,
-    Phase2_FAKE_RAGE,
+    PHASE2_SLEEPING_GAS,
+    PHASE2_FAKE_RAGE,
 
     PHASE3_FIELD_ATTACK,
     PHASE3_MAGNETIC_FIELD,
-    Phase3_THORN_BUSH,
-    Phase3_MAZE,
+    PHASE3_THORN_BUSH,
+    PHASE3_MAZE,
     ;
 
     private final String noUnderscoreName;
