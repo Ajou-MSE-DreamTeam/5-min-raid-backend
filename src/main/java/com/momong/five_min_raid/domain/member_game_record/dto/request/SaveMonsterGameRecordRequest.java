@@ -6,6 +6,7 @@ import com.momong.five_min_raid.domain.member_game_record.entity.MonsterGameReco
 import com.momong.five_min_raid.global.common.constant.MonsterPerkType;
 import com.momong.five_min_raid.global.common.constant.MonsterType;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
@@ -42,7 +43,7 @@ public class SaveMonsterGameRecordRequest {
     private Integer totalDamageTaken;
 
     public MonsterGameRecord toEntity(
-            @NotNull Member member,
+            @Nullable Member member,
             @NotNull GameRecord gameRecord
     ) {
         return MonsterGameRecord.create(

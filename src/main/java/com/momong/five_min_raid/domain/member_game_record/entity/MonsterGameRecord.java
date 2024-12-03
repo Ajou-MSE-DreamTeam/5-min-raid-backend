@@ -4,6 +4,7 @@ import com.momong.five_min_raid.domain.game_record.entity.GameRecord;
 import com.momong.five_min_raid.domain.member.entity.Member;
 import com.momong.five_min_raid.global.common.constant.MonsterPerkType;
 import com.momong.five_min_raid.global.common.constant.MonsterType;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -49,7 +50,7 @@ public class MonsterGameRecord extends MemberGameRecord {
     }
 
     public static MonsterGameRecord create(
-            @NotNull Member member,
+            @Nullable Member member,
             @NotNull GameRecord gameRecord,
             @NotNull MonsterType monsterType,
             @NotNull List<MonsterPerkType> perks,
