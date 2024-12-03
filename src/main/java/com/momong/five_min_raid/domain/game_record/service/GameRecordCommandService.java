@@ -11,12 +11,14 @@ import com.momong.five_min_raid.domain.member.service.MemberQueryService;
 import com.momong.five_min_raid.domain.member_game_record.dto.request.SaveGuardianGameRecordRequest;
 import com.momong.five_min_raid.domain.member_game_record.dto.request.SaveMonsterGameRecordRequest;
 import com.momong.five_min_raid.domain.member_game_record.service.MemberGameRecordService;
+import com.momong.five_min_raid.global.common.properties.FMRaidProperties;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @RequiredArgsConstructor
 @Transactional
@@ -28,6 +30,7 @@ public class GameRecordCommandService {
     private final MemberQueryService memberQueryService;
     private final MemberGameRecordService memberGameRecordService;
     private final GameRecordRepository gameRecordRepository;
+    private final FMRaidProperties fmRaidProperties;
 
     /**
      * 게임 결과를 기록한다.
@@ -62,10 +65,13 @@ public class GameRecordCommandService {
      * @param saveMonsterGameRecordRequest 저장하고자 하는 몬스터의 인게임 정보
      */
     private void saveMonsterGameRecord(GameRecord gameRecord, SaveMonsterGameRecordRequest saveMonsterGameRecordRequest) {
-        Member member = getMemberById(saveMonsterGameRecordRequest.getMemberId());
-        memberGameRecordService.saveMonsterGameRecord(
-                saveMonsterGameRecordRequest.toEntity(member, gameRecord)
-        );
+        Long monsterMemberId = saveMonsterGameRecordRequest.getMemberId();
+
+        Member monsterMember = null;
+        if (!Objects.equals(monsterMemberId, fmRaidProperties.aiMemberId())) {
+            monsterMember = getMemberById(monsterMemberId);
+        }
+        memberGameRecordService.saveMonsterGameRecord(saveMonsterGameRecordRequest.toEntity(monsterMember, gameRecord));
     }
 
     /**
@@ -82,10 +88,12 @@ public class GameRecordCommandService {
         memberGameRecordService.saveGuardianGameRecords(
                 saveGuardianGameRecordRequests.stream()
                         .map(guardianGameRecordRequest -> {
-                            Member member = getMemberById(guardianGameRecordRequest.getMemberId());
+                            Member member = null;
+                            if (!Objects.equals(guardianGameRecordRequest.getMemberId(), fmRaidProperties.aiMemberId())) {
+                                member = getMemberById(guardianGameRecordRequest.getMemberId());
+                            }
                             return guardianGameRecordRequest.toEntity(member, gameRecord);
-                        })
-                        .toList()
+                        }).toList()
         );
     }
 
