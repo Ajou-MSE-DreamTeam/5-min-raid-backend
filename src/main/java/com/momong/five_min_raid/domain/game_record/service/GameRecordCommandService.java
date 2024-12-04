@@ -83,7 +83,6 @@ public class GameRecordCommandService {
      * @throws GuardianGameRecordDuplicateException   중복된 데이터가 있는 경우. 즉, 동일한 memberId가 존재하는 경우.
      */
     private void saveGuardianGameRecords(GameRecord gameRecord, List<SaveGuardianGameRecordRequest> saveGuardianGameRecordRequests) {
-        validateNumOfGuardians(saveGuardianGameRecordRequests);
         validateNoDuplicateGuardians(saveGuardianGameRecordRequests);
         memberGameRecordService.saveGuardianGameRecords(
                 saveGuardianGameRecordRequests.stream()
@@ -95,18 +94,6 @@ public class GameRecordCommandService {
                             return guardianGameRecordRequest.toEntity(member, gameRecord);
                         }).toList()
         );
-    }
-
-    /**
-     * 저장하고자 하는 가디언 정보들의 개수가 유효한지 검증한다.
-     *
-     * @param saveGuardianGameRecordRequests 저장하고자 하는 가디언 정보들이 담긴 리스트
-     * @throws InvalidGuardianGameRecordSizeException 저장하고자 하는 가디언 정보들의 개수가 유효하지 않은 경우.
-     */
-    private void validateNumOfGuardians(List<SaveGuardianGameRecordRequest> saveGuardianGameRecordRequests) {
-        if (saveGuardianGameRecordRequests.size() != GUARDIAN_SIZE_REQUIRED) {
-            throw new InvalidGuardianGameRecordSizeException();
-        }
     }
 
     /**
