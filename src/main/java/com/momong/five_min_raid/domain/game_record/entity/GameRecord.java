@@ -32,6 +32,8 @@ public class GameRecord extends BaseTimeEntity {
     @NotNull
     private LocalDateTime endedAt;
 
+    private Integer exp;
+
     private Integer phase1Time;
 
     private Integer phase2Time;
@@ -42,10 +44,11 @@ public class GameRecord extends BaseTimeEntity {
             @NotNull TeamType winnerTeam,
             @NotNull LocalDateTime startedAt,
             @NotNull LocalDateTime endedAt,
+            Integer exp,
             Integer phase1Time,
             Integer phase2Time,
             Integer phase3Time
     ) {
-        return new GameRecord(null, winnerTeam, startedAt, endedAt, phase1Time, phase2Time, phase3Time);
+        return new GameRecord(null, winnerTeam, startedAt, endedAt, exp, phase1Time, phase2Time, phase3Time);
     }
 }

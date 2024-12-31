@@ -39,6 +39,9 @@ public class SaveGameRecordRequest {
     @NotNull
     private LocalDateTime endedAt;
 
+    @Schema(description = "(가디언) 획득한 경험치량", example = "300")
+    private Integer exp;
+
     @Schema(description = "1 페이즈에 소요된 시간(초)", example = "60")
     private Integer phase1Time;
 
@@ -53,6 +56,7 @@ public class SaveGameRecordRequest {
                 this.winnerTeam,
                 this.startedAt,
                 this.endedAt,
+                this.exp,
                 this.phase1Time,
                 this.phase2Time,
                 this.phase3Time

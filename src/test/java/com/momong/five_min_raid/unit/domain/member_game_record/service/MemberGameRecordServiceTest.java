@@ -109,6 +109,7 @@ class MemberGameRecordServiceTest {
                 TeamType.MONSTER,
                 LocalDateTime.of(2024, 1, 1, 0, 0),
                 LocalDateTime.of(2024, 1, 1, 0, 5),
+                100,
                 60,
                 60,
                 60
