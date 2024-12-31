@@ -44,6 +44,10 @@ public class GuardianGameRecord extends MemberGameRecord {
     @NotNull
     private Boolean isDisconnected;
 
+    private Integer minionKillCount;
+
+    private Integer minionDamageDealt;
+
     public GuardianGameRecord(
             @NotNull Long id,
             @NotNull Member member,
@@ -55,7 +59,9 @@ public class GuardianGameRecord extends MemberGameRecord {
             @NotNull Integer totalHealingAmount,
             @NotNull Integer numOfDowns,
             @NotNull Integer numOfRevives,
-            @NotNull Boolean isDisconnected
+            @NotNull Boolean isDisconnected,
+            Integer minionKillCount,
+            Integer minionDamageDealt
     ) {
         super(id, member, gameRecord);
         this.guardianType = guardianType;
@@ -66,6 +72,8 @@ public class GuardianGameRecord extends MemberGameRecord {
         this.numOfDowns = numOfDowns;
         this.numOfRevives = numOfRevives;
         this.isDisconnected = isDisconnected;
+        this.minionKillCount = minionKillCount;
+        this.minionDamageDealt = minionDamageDealt;
     }
 
     public static GuardianGameRecord create(
@@ -78,7 +86,9 @@ public class GuardianGameRecord extends MemberGameRecord {
             @NotNull Integer totalHealingAmount,
             @NotNull Integer numOfDowns,
             @NotNull Integer numOfRevives,
-            @NotNull Boolean isDisconnected
+            @NotNull Boolean isDisconnected,
+            Integer minionKillCount,
+            Integer minionDamageDealt
     ) {
         return new GuardianGameRecord(
                 null,
@@ -91,7 +101,9 @@ public class GuardianGameRecord extends MemberGameRecord {
                 totalHealingAmount,
                 numOfDowns,
                 numOfRevives,
-                isDisconnected
+                isDisconnected,
+                minionKillCount,
+                minionDamageDealt
         );
     }
 

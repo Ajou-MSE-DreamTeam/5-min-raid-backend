@@ -57,6 +57,12 @@ public class SaveGuardianGameRecordRequest {
     @NotNull
     private Boolean isDisconnected;
 
+    @Schema(description = "미니언을 처치한 횟수", example = "3")
+    private Integer minionKillCount;
+
+    @Schema(description = "미니언에게 가한 데미지", example = "250")
+    private Integer minionDamageDealt;
+
     public GuardianGameRecord toEntity(
             @NotNull Member member,
             @NotNull GameRecord gameRecord
@@ -71,7 +77,9 @@ public class SaveGuardianGameRecordRequest {
                 this.totalHealingAmount,
                 this.numOfDowns,
                 this.numOfRevives,
-                this.isDisconnected
+                this.isDisconnected,
+                this.minionKillCount,
+                this.minionDamageDealt
         );
     }
 }

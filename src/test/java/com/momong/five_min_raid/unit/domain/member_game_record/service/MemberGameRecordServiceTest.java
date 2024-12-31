@@ -108,7 +108,10 @@ class MemberGameRecordServiceTest {
                 gameRecordId,
                 TeamType.MONSTER,
                 LocalDateTime.of(2024, 1, 1, 0, 0),
-                LocalDateTime.of(2024, 1, 1, 0, 5)
+                LocalDateTime.of(2024, 1, 1, 0, 5),
+                60,
+                60,
+                60
         );
     }
 
@@ -156,7 +159,9 @@ class MemberGameRecordServiceTest {
                 0,
                 2,
                 1,
-                false
+                false,
+                0,
+                0
         );
     }
 
@@ -176,7 +181,9 @@ class MemberGameRecordServiceTest {
                 0,
                 2,
                 1,
-                false
+                false,
+                0,
+                0
         );
     }
 }

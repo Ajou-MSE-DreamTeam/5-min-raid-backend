@@ -6,7 +6,6 @@ import com.momong.five_min_raid.domain.member_game_record.dto.request.SaveMonste
 import com.momong.five_min_raid.global.common.constant.TeamType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -40,11 +39,23 @@ public class SaveGameRecordRequest {
     @NotNull
     private LocalDateTime endedAt;
 
+    @Schema(description = "1 페이즈에 소요된 시간(초)", example = "60")
+    private Integer phase1Time;
+
+    @Schema(description = "2 페이즈에 소요된 시간(초)", example = "100")
+    private Integer phase2Time;
+
+    @Schema(description = "3 페이즈에 소요된 시간(초)", example = "120")
+    private Integer phase3Time;
+
     public GameRecord toEntity() {
         return GameRecord.create(
                 this.winnerTeam,
                 this.startedAt,
-                this.endedAt
+                this.endedAt,
+                this.phase1Time,
+                this.phase2Time,
+                this.phase3Time
         );
     }
 }
