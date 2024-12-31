@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@DiscriminatorColumn(name = "team_type")
 @Inheritance(strategy = InheritanceType.JOINED)
 @Entity
 public abstract class MemberGameRecord extends BaseTimeEntity {
