@@ -30,6 +30,7 @@ public class SecurityConfig {
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     private static final String[] AUTH_WHITE_PATHS = {
+            "/favicon.ico",
             "/actuator/**",
             "/swagger-ui/**",
             "/v3/api-docs/**",
@@ -39,6 +40,7 @@ public class SecurityConfig {
     };
 
     private static final Map<String, HttpMethod> AUTH_WHITE_LIST = Map.of(
+            "/actuator/health", HttpMethod.GET,
             "/api/v*/client-versions/latest", HttpMethod.GET
     );
 
