@@ -30,6 +30,7 @@ public class SecurityConfig {
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     private static final String[] AUTH_WHITE_PATHS = {
+            "/actuator/**",
             "/swagger-ui/**",
             "/v3/api-docs/**",
             "/api/v*/auth/login/**",
