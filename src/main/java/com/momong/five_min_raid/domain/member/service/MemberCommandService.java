@@ -53,11 +53,9 @@ public class MemberCommandService {
 
         Member member = memberQueryService.getById(memberId);
 
-        if (member.getNicknameLastUpdatedAt() != null) {
-            long daysSinceNicknameUpdate = ChronoUnit.DAYS.between(member.getNicknameLastUpdatedAt(), LocalDate.now());
-            if (daysSinceNicknameUpdate < NICKNAME_CHANGE_COOLDOWN_DAYS) {
-                throw new NicknameChangeCooldownException();
-            }
+        long daysSinceNicknameUpdate = ChronoUnit.DAYS.between(member.getNicknameLastUpdatedAt(), LocalDate.now());
+        if (daysSinceNicknameUpdate < NICKNAME_CHANGE_COOLDOWN_DAYS) {
+            throw new NicknameChangeCooldownException();
         }
 
         member.updateNickname(nickname);
@@ -80,8 +78,8 @@ public class MemberCommandService {
      */
     private void validateNicknamePolicy(String nickname) {
         if (!nickname.matches("^[0-9a-zA-Zㄱ-ㅎ가-힣]*$")
-            || nickname.length() < 2
-            || nickname.length() > 12) {
+                || nickname.length() < 2
+                || nickname.length() > 12) {
             throw new InvalidMemberNicknameException(nickname);
         }
     }
