@@ -42,6 +42,7 @@ public class MemberControllerV1 {
     )
     @ApiResponses({
             @ApiResponse(description = "OK", responseCode = "200"),
+            @ApiResponse(description = "[2004] 마지막 닉네임 설정 후 14일이 지나지 않은 경우", responseCode = "403", content = @Content),
             @ApiResponse(description = "[2002] 이미 사용중인 닉네임인 경우", responseCode = "409", content = @Content),
             @ApiResponse(description = "[2001] 정책에 맞지 않는 닉네임인 경우", responseCode = "422", content = @Content)
     })

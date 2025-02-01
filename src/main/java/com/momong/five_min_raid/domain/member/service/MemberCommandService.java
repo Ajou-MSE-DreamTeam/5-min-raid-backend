@@ -5,16 +5,23 @@ import com.momong.five_min_raid.domain.member.entity.Member;
 import com.momong.five_min_raid.domain.member.exception.InvalidMemberNicknameException;
 import com.momong.five_min_raid.domain.member.exception.MemberDeletionPermissionDeniedException;
 import com.momong.five_min_raid.domain.member.exception.MemberNicknameDuplicationException;
+import com.momong.five_min_raid.domain.member.exception.NicknameChangeCooldownException;
 import com.momong.five_min_raid.domain.member.repository.MemberRepository;
 import com.momong.five_min_raid.domain.member_game_record.service.MemberGameRecordService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+
 @RequiredArgsConstructor
 @Transactional
 @Service
 public class MemberCommandService {
+
+    private static final int NICKNAME_CHANGE_COOLDOWN_DAYS = 14;
+
     private final MemberQueryService memberQueryService;
     private final MemberGameRecordService memberGameRecordService;
     private final MemberRepository memberRepository;
@@ -45,6 +52,14 @@ public class MemberCommandService {
         }
 
         Member member = memberQueryService.getById(memberId);
+
+        if (member.getNicknameLastUpdatedAt() != null) {
+            long daysSinceNicknameUpdate = ChronoUnit.DAYS.between(member.getNicknameLastUpdatedAt(), LocalDate.now());
+            if (daysSinceNicknameUpdate < NICKNAME_CHANGE_COOLDOWN_DAYS) {
+                throw new NicknameChangeCooldownException();
+            }
+        }
+
         member.updateNickname(nickname);
         return MemberDto.from(member);
     }

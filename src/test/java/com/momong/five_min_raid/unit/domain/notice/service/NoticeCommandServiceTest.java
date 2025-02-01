@@ -10,6 +10,7 @@ import com.momong.five_min_raid.domain.notice.entity.Notice;
 import com.momong.five_min_raid.domain.notice.repository.NoticeRepository;
 import com.momong.five_min_raid.domain.notice.service.NoticeCommandService;
 import com.momong.five_min_raid.global.common.exception.NotAdminException;
+import jakarta.validation.constraints.NotNull;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,6 +19,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.lang.reflect.Constructor;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -87,19 +89,20 @@ class NoticeCommandServiceTest {
     }
 
     private Member createUser(Long memberId) {
-        return createMember(memberId, String.valueOf(memberId), Set.of(RoleType.USER), String.valueOf(memberId));
+        return createMember(memberId, String.valueOf(memberId), Set.of(RoleType.USER), String.valueOf(memberId), LocalDate.of(0, 1, 1));
     }
 
     private Member createAdmin(Long memberId) {
-        return createMember(memberId, String.valueOf(memberId), Set.of(RoleType.USER, RoleType.ADMIN), String.valueOf(memberId));
+        return createMember(memberId, String.valueOf(memberId), Set.of(RoleType.USER, RoleType.ADMIN), String.valueOf(memberId), LocalDate.of(0, 1, 1));
     }
 
-    private Member createMember(Long memberId, String socialUid, Set<RoleType> roleTypes, String nickname) {
+    private Member createMember(Long memberId, String socialUid, Set<RoleType> roleTypes, String nickname, @NotNull LocalDate nicknameLastUpdatedAt) {
         return new Member(
                 memberId,
                 socialUid,
                 roleTypes,
-                nickname
+                nickname,
+                nicknameLastUpdatedAt
         );
     }
 

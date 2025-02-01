@@ -43,6 +43,7 @@ public enum CustomExceptionType {
     INVALID_MEMBER_NICKNAME(2001, "유효하지 않은 닉네임입니다. 닉네임은 2~12 글자의 영어, 한글, 숫자만 사용할 수 있습니다."),
     MEMBER_NICKNAME_DUPLICATION(2002, "이미 사용중인 닉네임입니다."),
     MEMBER_DELETION_PERMISSION_DENIED(2003, "회원 삭제 권한이 없습니다."),
+    NICKNAME_CHANGE_COOLDOWN(2004, "마지막 닉네임 설정 후 14일이 지나지 않았습니다. 닉네임은 14일 간격으로 수정 가능합니다."),
 
     /**
      * 게임 기록({@link GameRecord}, {@link MemberGameRecord}, {@link MonsterGameRecord}, {@link GuardianGameRecord}) 관련 예외

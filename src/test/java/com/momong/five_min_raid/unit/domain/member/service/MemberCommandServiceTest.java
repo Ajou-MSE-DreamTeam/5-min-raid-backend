@@ -15,6 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -139,15 +140,20 @@ class MemberCommandServiceTest {
     }
 
     private Member createMember(Long memberId, String socialUid, String nickname) {
-        return createMember(memberId, socialUid, Set.of(RoleType.USER), nickname);
+        return createMember(memberId, socialUid, Set.of(RoleType.USER), nickname, LocalDate.of(0, 1, 1));
     }
 
     private Member createMember(Long memberId, String socialUid, Set<RoleType> roleTypes, String nickname) {
+        return new Member(memberId, socialUid, roleTypes, nickname, LocalDate.of(0, 1, 1));
+    }
+
+    private Member createMember(Long memberId, String socialUid, Set<RoleType> roleTypes, String nickname, LocalDate nicknameLastUpdatedAt) {
         return new Member(
                 memberId,
                 socialUid,
                 roleTypes,
-                nickname
+                nickname,
+                nicknameLastUpdatedAt
         );
     }
 }

@@ -4,13 +4,12 @@ import com.momong.five_min_raid.domain.member.constant.RoleType;
 import com.momong.five_min_raid.domain.member.converter.RoleTypesConverter;
 import com.momong.five_min_raid.global.common.entity.BaseTimeEntity;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -38,12 +37,16 @@ public class Member extends BaseTimeEntity {
     @Column(unique = true)
     private String nickname;
 
+    @Column(nullable = false)
+    private LocalDate nicknameLastUpdatedAt;
+
     public static Member createNewMember(String socialUid) {
-        return new Member(null, socialUid, Set.of(RoleType.USER), null);
+        return new Member(null, socialUid, Set.of(RoleType.USER), null, LocalDate.of(0, 1, 1));
     }
 
     public void updateNickname(String nickname) {
         this.nickname = nickname;
+        this.nicknameLastUpdatedAt = LocalDate.now();
     }
 
     public boolean isAdmin() {

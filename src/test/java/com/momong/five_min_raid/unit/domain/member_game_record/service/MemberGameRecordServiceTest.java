@@ -21,6 +21,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
@@ -86,20 +87,22 @@ class MemberGameRecordServiceTest {
             @NotNull String socialUid,
             @NotNull String nickname
     ) {
-        return createMember(memberId, socialUid, Set.of(RoleType.USER), nickname);
+        return createMember(memberId, socialUid, Set.of(RoleType.USER), nickname, LocalDate.of(0, 1, 1));
     }
 
     private Member createMember(
             @NotNull Long memberId,
             @NotNull String socialUid,
             @NotNull Set<RoleType> roleTypes,
-            @NotNull String nickname
+            @NotNull String nickname,
+            @NotNull LocalDate nicknameLastUpdatedAt
     ) {
         return new Member(
                 memberId,
                 socialUid,
                 roleTypes,
-                nickname
+                nickname,
+                nicknameLastUpdatedAt
         );
     }
 
