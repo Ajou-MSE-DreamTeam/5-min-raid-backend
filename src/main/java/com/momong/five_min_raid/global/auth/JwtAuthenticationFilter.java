@@ -1,6 +1,5 @@
 package com.momong.five_min_raid.global.auth;
 
-import com.momong.five_min_raid.global.auth.exception.AccessTokenValidateException;
 import com.momong.five_min_raid.global.auth.exception.TokenValidateException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -13,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import javax.security.sasl.AuthenticationException;
 import java.io.IOException;
 
 @Slf4j
@@ -35,16 +35,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String accessToken = jwtTokenProvider.getToken(request);
 
-        if (accessToken != null) {
-            try {
-                jwtTokenProvider.validateToken(accessToken);
-            } catch (Exception ex) {
-                throw new AccessTokenValidateException(ex);
+        try {
+            if (accessToken == null) {
+                throw new AuthenticationException();
             }
+            jwtTokenProvider.validateToken(accessToken);
             Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
+        } catch (Exception ignored) {
         }
-
         filterChain.doFilter(request, response);
     }
 }
