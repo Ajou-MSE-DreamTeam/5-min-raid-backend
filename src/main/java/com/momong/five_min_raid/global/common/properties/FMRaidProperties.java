@@ -4,6 +4,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties("fmraid")
 public record FMRaidProperties(
-        Long aiMemberId
+        Long aiMemberId,
+        String serverUrl
 ) {
 }
