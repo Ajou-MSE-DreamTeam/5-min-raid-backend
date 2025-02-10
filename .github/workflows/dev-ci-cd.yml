@@ -1,8 +1,8 @@
-name: Eatery Prod Server - CI/CD
+name: Eatery Dev Server - CI/CD
 
 on:
   push:
-    branches: [ "main", "develop" ]
+    branches: [ "develop" ]
 
 jobs:
   build:
@@ -21,7 +21,7 @@ jobs:
         run: echo "${{ secrets.APPLICATION_PROPERTIES_TEST }}" > ./src/main/resources/application-test.properties
 
       - name: Setup environment variables
-        run: echo "${{ secrets.ENV_PROPERTIES_PROD }}" > ./src/main/resources/env.properties
+        run: echo "${{ secrets.ENV_PROPERTIES_DEV }}" > ./src/main/resources/env.properties
 
       - name: Build with Gradle
         uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
@@ -39,18 +39,18 @@ jobs:
         if: ${{ !failure() }}
         run: |
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker build -t ${{ secrets.DOCKER_REPO_PROD }} -f Dockerfile .
-          docker push ${{ secrets.DOCKER_REPO_PROD }}
+          docker build -t ${{ secrets.DEV_DOCKER_REPO }} -f Dockerfile-dev .
+          docker push ${{ secrets.DEV_DOCKER_REPO }}
 
       - name: Executing remote ssh commands with docker compose for Continuous Delivery
         if: ${{ !failure() }}
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.AWS_EC2_HOST_PROD }}
-          username: ${{ secrets.AWS_EC2_USERNAME }}
-          key: ${{ secrets.AWS_EC2_KEY_PROD }}
+          host: ${{ secrets.DEV_AWS_EC2_HOST }}
+          username: ${{ secrets.DEV_AWS_EC2_USERNAME }}
+          key: ${{ secrets.DEV_AWS_EC2_KEY }}
           script: |
-            cd /home/ec2-user/fmr/server-main/
+            cd /home/ec2-user/fmr
             docker-compose down
-            docker pull ${{ secrets.DOCKER_REPO_PROD }}
+            docker pull ${{ secrets.DEV_DOCKER_REPO }}
             docker-compose up -d
