@@ -51,6 +51,6 @@ jobs:
           key: ${{ secrets.DEV_AWS_EC2_KEY }}
           script: |
             cd /home/ec2-user/fmr
-            docker-compose down
+            docker compose down
             docker pull ${{ secrets.DEV_DOCKER_REPO }}
-            docker-compose up -d
+            docker compose up -d
