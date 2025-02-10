@@ -77,7 +77,7 @@ public class MemberCommandService {
      * @throws InvalidMemberNicknameException 닉네임이 정책에 위반하는 경우.
      */
     private void validateNicknamePolicy(String nickname) {
-        if (!nickname.matches("^[0-9a-zA-Zㄱ-ㅎ가-힣]*$")
+        if (!nickname.matches("^[0-9a-zA-Zㄱ-ㅎ가-힣ぁ-んァ-ン一-龯]*$")
                 || nickname.length() < 2
                 || nickname.length() > 12) {
             throw new InvalidMemberNicknameException(nickname);
