@@ -1,6 +1,5 @@
 package com.momong.five_min_raid.domain.game_record.dto.request;
 
-import com.momong.five_min_raid.domain.game_record.entity.GameRecord;
 import com.momong.five_min_raid.domain.member_game_record.dto.request.SaveGuardianGameRecordRequest;
 import com.momong.five_min_raid.domain.member_game_record.dto.request.SaveMonsterGameRecordRequest;
 import com.momong.five_min_raid.global.common.constant.TeamType;
@@ -51,15 +50,6 @@ public class SaveGameRecordRequest {
     @Schema(description = "3 페이즈에 소요된 시간(초)", example = "120")
     private Integer phase3Time;
 
-    public GameRecord toEntity() {
-        return GameRecord.create(
-                this.winnerTeam,
-                this.startedAt,
-                this.endedAt,
-                this.exp,
-                this.phase1Time,
-                this.phase2Time,
-                this.phase3Time
-        );
-    }
+    @Schema(description = "사용된 맵 기믹 리스트")
+    private List<String> mapGimmicks;
 }

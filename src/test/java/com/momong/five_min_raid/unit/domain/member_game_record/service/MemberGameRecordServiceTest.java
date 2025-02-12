@@ -115,7 +115,8 @@ class MemberGameRecordServiceTest {
                 100,
                 60,
                 60,
-                60
+                60,
+                List.of()
         );
     }
 

@@ -148,7 +148,8 @@ class GameRecordControllerV1Test {
                 100,
                 60,
                 60,
-                60
+                60,
+                List.of("gimmick1", "gimmick2", "gimmick3")
         );
     }
 

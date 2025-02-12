@@ -10,6 +10,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.LinkedList;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -40,6 +42,9 @@ public class GameRecord extends BaseTimeEntity {
 
     private Integer phase3Time;
 
+    @OneToMany(mappedBy = "gameRecord", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MapGimmick> mapGimmicks;
+
     public static GameRecord create(
             @NotNull TeamType winnerTeam,
             @NotNull LocalDateTime startedAt,
@@ -49,6 +54,10 @@ public class GameRecord extends BaseTimeEntity {
             Integer phase2Time,
             Integer phase3Time
     ) {
-        return new GameRecord(null, winnerTeam, startedAt, endedAt, exp, phase1Time, phase2Time, phase3Time);
+        return new GameRecord(null, winnerTeam, startedAt, endedAt, exp, phase1Time, phase2Time, phase3Time, new LinkedList<>());
+    }
+
+    public void addMapGimmicks(List<MapGimmick> mapGimmicks) {
+        this.mapGimmicks.addAll(mapGimmicks);
     }
 }

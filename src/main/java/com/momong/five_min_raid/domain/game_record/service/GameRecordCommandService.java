@@ -3,6 +3,7 @@ package com.momong.five_min_raid.domain.game_record.service;
 import com.momong.five_min_raid.domain.game_record.dto.GameRecordDto;
 import com.momong.five_min_raid.domain.game_record.dto.request.SaveGameRecordRequest;
 import com.momong.five_min_raid.domain.game_record.entity.GameRecord;
+import com.momong.five_min_raid.domain.game_record.entity.MapGimmick;
 import com.momong.five_min_raid.domain.game_record.exception.GuardianGameRecordDuplicateException;
 import com.momong.five_min_raid.domain.game_record.exception.InvalidGuardianGameRecordSizeException;
 import com.momong.five_min_raid.domain.game_record.repository.GameRecordRepository;
@@ -41,7 +42,21 @@ public class GameRecordCommandService {
      * @throws GuardianGameRecordDuplicateException   중복된 데이터가 있는 경우. 즉, 동일한 memberId가 존재하는 경우.
      */
     public GameRecordDto saveGameRecord(@NotNull SaveGameRecordRequest saveGameRecordRequest) {
-        GameRecord gameRecord = gameRecordRepository.save(saveGameRecordRequest.toEntity());
+        GameRecord gameRecord = GameRecord.create(
+                saveGameRecordRequest.getWinnerTeam(),
+                saveGameRecordRequest.getStartedAt(),
+                saveGameRecordRequest.getEndedAt(),
+                saveGameRecordRequest.getExp(),
+                saveGameRecordRequest.getPhase1Time(),
+                saveGameRecordRequest.getPhase2Time(),
+                saveGameRecordRequest.getPhase3Time()
+        );
+        gameRecord.addMapGimmicks(
+                saveGameRecordRequest.getMapGimmicks().stream()
+                        .map(gimmickName -> MapGimmick.create(gameRecord, gimmickName))
+                        .toList()
+        );
+        gameRecordRepository.save(gameRecord);
         saveMonsterGameRecord(gameRecord, saveGameRecordRequest.getMonster());
         saveGuardianGameRecords(gameRecord, saveGameRecordRequest.getGuardians());
 
