@@ -8,7 +8,7 @@ import com.momong.five_min_raid.domain.game_record.exception.GuardianGameRecordD
 import com.momong.five_min_raid.domain.game_record.exception.InvalidGuardianGameRecordSizeException;
 import com.momong.five_min_raid.domain.game_record.repository.GameRecordRepository;
 import com.momong.five_min_raid.domain.member.entity.Member;
-import com.momong.five_min_raid.domain.member.service.MemberQueryService;
+import com.momong.five_min_raid.domain.member.service.MemberService;
 import com.momong.five_min_raid.domain.member_game_record.dto.request.SaveGuardianGameRecordRequest;
 import com.momong.five_min_raid.domain.member_game_record.dto.request.SaveMonsterGameRecordRequest;
 import com.momong.five_min_raid.domain.member_game_record.entity.GuardianGameRecord;
@@ -30,7 +30,7 @@ public class GameRecordCommandService {
 
     public static final int GUARDIAN_SIZE_REQUIRED = 3;
 
-    private final MemberQueryService memberQueryService;
+    private final MemberService memberService;
     private final MemberGameRecordService memberGameRecordService;
     private final GameRecordRepository gameRecordRepository;
     private final FMRaidProperties fmRaidProperties;
@@ -72,7 +72,7 @@ public class GameRecordCommandService {
      * @return 조회된 Member entity
      */
     private Member getMemberById(Long memberId) {
-        return memberQueryService.getById(memberId);
+        return memberService.getById(memberId);
     }
 
     /**

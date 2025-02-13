@@ -1,7 +1,7 @@
 package com.momong.five_min_raid.domain.notice.service;
 
 import com.momong.five_min_raid.domain.member.entity.Member;
-import com.momong.five_min_raid.domain.member.service.MemberQueryService;
+import com.momong.five_min_raid.domain.member.service.MemberService;
 import com.momong.five_min_raid.domain.notice.dto.NoticeDto;
 import com.momong.five_min_raid.domain.notice.dto.request.PostNoticeRequest;
 import com.momong.five_min_raid.domain.notice.entity.Notice;
@@ -11,14 +11,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @RequiredArgsConstructor
 @Transactional
 @Service
 public class NoticeCommandService {
 
-    private final MemberQueryService memberQueryService;
+    private final MemberService memberService;
     private final NoticeRepository noticeRepository;
 
     /**
@@ -30,7 +28,7 @@ public class NoticeCommandService {
      * @throws NotAdminException 공지를 등록하는 회원이 관리자(admin)이 아닌 경우
      */
     public NoticeDto postNotice(Long memberId, PostNoticeRequest postNoticeRequest) {
-        Member member = memberQueryService.getById(memberId);
+        Member member = memberService.getById(memberId);
         if (!member.isAdmin()) {
             throw new NotAdminException();
         }

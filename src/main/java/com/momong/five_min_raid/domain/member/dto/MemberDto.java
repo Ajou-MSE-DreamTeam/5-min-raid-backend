@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -18,13 +19,15 @@ public class MemberDto {
     private String socialUid;
     private Set<RoleType> roleTypes;
     private String nickname;
+    private LocalDate nicknameLastUpdatedAt;
 
     public static MemberDto from(Member member) {
         return new MemberDto(
                 member.getId(),
                 member.getSocialUid(),
                 member.getRoleTypes(),
-                member.getNickname()
+                member.getNickname(),
+                member.getNicknameLastUpdatedAt()
         );
     }
 }

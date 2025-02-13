@@ -23,6 +23,10 @@ public class UserPrincipal implements UserDetails {
                 .collect(Collectors.toUnmodifiableSet());
     }
 
+    public MemberDto getMemberDto() {
+        return memberDto;
+    }
+
     public Long getMemberId() {
         return memberDto.getId();
     }

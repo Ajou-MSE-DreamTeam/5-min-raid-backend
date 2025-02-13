@@ -87,7 +87,7 @@ public class JwtTokenProvider {
      * @param request Request 객체
      * @return Header에서 추출한 token
      */
-    public String getToken(HttpServletRequest request) {
+    public String findAccessToken(HttpServletRequest request) {
         String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         if (authorizationHeader == null || !authorizationHeader.startsWith(TOKEN_TYPE_BEARER)) {
             return null;

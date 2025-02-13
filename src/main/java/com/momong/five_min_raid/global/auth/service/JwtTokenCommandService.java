@@ -1,7 +1,7 @@
 package com.momong.five_min_raid.global.auth.service;
 
 import com.momong.five_min_raid.domain.member.dto.MemberDto;
-import com.momong.five_min_raid.domain.member.service.MemberQueryService;
+import com.momong.five_min_raid.domain.member.service.MemberService;
 import com.momong.five_min_raid.global.auth.JwtTokenProvider;
 import com.momong.five_min_raid.global.auth.dto.AccessAndRefreshTokensInfoDto;
 import com.momong.five_min_raid.global.auth.dto.JwtTokenInfoDto;
@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class JwtTokenCommandService {
 
-    private final MemberQueryService memberQueryService;
+    private final MemberService memberService;
     private final RefreshTokenRepository refreshTokenRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
@@ -49,7 +49,7 @@ public class JwtTokenCommandService {
         refreshTokenRepository.delete(refreshTokenEntity);
 
         Long memberId = refreshTokenEntity.getMemberId();
-        MemberDto memberDto = memberQueryService.getDtoById(memberId);
+        MemberDto memberDto = memberService.getDtoById(memberId);
 
         return createAccessAndRefreshToken(memberDto);
     }

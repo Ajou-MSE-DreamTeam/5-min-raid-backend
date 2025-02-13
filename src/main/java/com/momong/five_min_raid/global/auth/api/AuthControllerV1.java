@@ -1,8 +1,7 @@
 package com.momong.five_min_raid.global.auth.api;
 
 import com.momong.five_min_raid.domain.member.dto.MemberDto;
-import com.momong.five_min_raid.domain.member.service.MemberCommandService;
-import com.momong.five_min_raid.domain.member.service.MemberQueryService;
+import com.momong.five_min_raid.domain.member.service.MemberService;
 import com.momong.five_min_raid.global.auth.dto.AccessAndRefreshTokensInfoDto;
 import com.momong.five_min_raid.global.auth.dto.request.RefreshAccessAndRefreshTokensRequest;
 import com.momong.five_min_raid.global.auth.dto.request.UnityLoginRequest;
@@ -35,8 +34,7 @@ import static com.momong.five_min_raid.global.common.constant.GlobalConstants.AP
 @RestController
 public class AuthControllerV1 {
 
-    private final MemberCommandService memberCommandService;
-    private final MemberQueryService memberQueryService;
+    private final MemberService memberService;
     private final JwtTokenCommandService jwtTokenCommandService;
     private final JwtTokenQueryService jwtTokenQueryService;
 
@@ -59,11 +57,11 @@ public class AuthControllerV1 {
     public ResponseEntity<LoginResponse> unityLoginV1_1(@RequestBody @Valid UnityLoginRequest request) {
         boolean memberCreationFlag = false;
 
-        Optional<MemberDto> optionalMemberDto = memberQueryService.findDtoBySocialUid(request.getId());
+        Optional<MemberDto> optionalMemberDto = memberService.findDtoBySocialUid(request.getId());
         MemberDto memberDto;
         if (optionalMemberDto.isEmpty()) {
             memberCreationFlag = true;
-            memberDto = memberCommandService.createNewMember(request.getId());
+            memberDto = memberService.createNewMember(request.getId());
         } else {
             memberDto = optionalMemberDto.get();
         }

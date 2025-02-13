@@ -50,7 +50,8 @@ public class SecurityConfig {
 
     private static final Map<String, HttpMethod> AUTH_WHITE_LIST = Map.of(
             "/actuator/health", HttpMethod.GET,
-            "/api/v*/client-versions/latest", HttpMethod.GET
+            "/api/v*/client-versions/latest", HttpMethod.GET,
+            "/api/v*/members/nickname/availability", HttpMethod.GET
     );
 
     private static final Map<String, HttpMethod> ADMIN_AUTH_LIST = Map.of(

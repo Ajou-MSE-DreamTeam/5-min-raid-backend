@@ -1,11 +1,14 @@
 package com.momong.five_min_raid.domain.member.api;
 
 import com.momong.five_min_raid.domain.member.dto.MemberDto;
+import com.momong.five_min_raid.domain.member.dto.NicknameAvailability;
 import com.momong.five_min_raid.domain.member.dto.request.UpdateMemberNicknameRequest;
+import com.momong.five_min_raid.domain.member.dto.response.CheckNicknameAvailabilityResponse;
 import com.momong.five_min_raid.domain.member.dto.response.MemberResponse;
-import com.momong.five_min_raid.domain.member.service.MemberCommandService;
+import com.momong.five_min_raid.domain.member.service.MemberService;
 import com.momong.five_min_raid.global.auth.UserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -25,7 +28,26 @@ import static com.momong.five_min_raid.global.common.constant.GlobalConstants.AP
 @RestController
 public class MemberControllerV1 {
 
-    private final MemberCommandService memberCommandService;
+    private final MemberService memberService;
+
+    @Operation(
+            summary = "닉네임 이용 가능 여부 조회",
+            description = "닉네임이 이용가능한 닉네임인지 조회한다.",
+            security = @SecurityRequirement(name = "access-token")
+    )
+    @GetMapping(value = "/nickname/availability")
+    public CheckNicknameAvailabilityResponse checkNicknameAvailability(
+            @AuthenticationPrincipal
+            UserPrincipal userPrincipal,
+
+            @Parameter(description = "확인할 닉네임", example = "치와와")
+            @RequestParam
+            String nickname
+    ) {
+        MemberDto reqUser = userPrincipal != null ? userPrincipal.getMemberDto() : null;
+        NicknameAvailability availability = memberService.checkNicknameAvailability(reqUser, nickname);
+        return new CheckNicknameAvailabilityResponse(nickname, availability.isAvailable(), availability.unavailableReason());
+    }
 
     @Operation(
             summary = "회원 닉네임 수정하기",
@@ -51,7 +73,7 @@ public class MemberControllerV1 {
             @AuthenticationPrincipal UserPrincipal userPrincipal,
             @Valid @RequestBody UpdateMemberNicknameRequest request
     ) {
-        MemberDto memberDto = memberCommandService.updateMemberNickname(userPrincipal.getMemberId(), request.getNickname());
+        MemberDto memberDto = memberService.updateMemberNickname(userPrincipal.getMemberId(), request.getNickname());
         return MemberResponse.from(memberDto);
     }
 
@@ -67,7 +89,7 @@ public class MemberControllerV1 {
     @DeleteMapping(value = "/me", headers = API_MINOR_VERSION_HEADER_NAME + "=1")
     public ResponseEntity<Void> deleteMemberV1_1(@AuthenticationPrincipal UserPrincipal userPrincipal) {
         long requestUserId = userPrincipal.getMemberId();
-        memberCommandService.deleteMember(requestUserId, requestUserId);
+        memberService.deleteMember(requestUserId, requestUserId);
         return ResponseEntity.noContent().build();
     }
 }
