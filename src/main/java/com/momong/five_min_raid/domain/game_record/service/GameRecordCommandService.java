@@ -11,6 +11,8 @@ import com.momong.five_min_raid.domain.member.entity.Member;
 import com.momong.five_min_raid.domain.member.service.MemberQueryService;
 import com.momong.five_min_raid.domain.member_game_record.dto.request.SaveGuardianGameRecordRequest;
 import com.momong.five_min_raid.domain.member_game_record.dto.request.SaveMonsterGameRecordRequest;
+import com.momong.five_min_raid.domain.member_game_record.entity.GuardianGameRecord;
+import com.momong.five_min_raid.domain.member_game_record.entity.GuardianPerk;
 import com.momong.five_min_raid.domain.member_game_record.service.MemberGameRecordService;
 import com.momong.five_min_raid.global.common.properties.FMRaidProperties;
 import jakarta.validation.constraints.NotNull;
@@ -106,7 +108,24 @@ public class GameRecordCommandService {
                             if (!Objects.equals(guardianGameRecordRequest.getMemberId(), fmRaidProperties.aiMemberId())) {
                                 member = getMemberById(guardianGameRecordRequest.getMemberId());
                             }
-                            return guardianGameRecordRequest.toEntity(member, gameRecord);
+                            GuardianGameRecord guardianGameRecord = GuardianGameRecord.create(
+                                    member,
+                                    gameRecord,
+                                    guardianGameRecordRequest.getGuardianType(),
+                                    guardianGameRecordRequest.getTotalDamageDealt(),
+                                    guardianGameRecordRequest.getTotalDamageTaken(),
+                                    guardianGameRecordRequest.getTotalHealingAmount(),
+                                    guardianGameRecordRequest.getNumOfDowns(),
+                                    guardianGameRecordRequest.getNumOfRevives(),
+                                    guardianGameRecordRequest.getIsDisconnected(),
+                                    guardianGameRecordRequest.getMinionKillCount(),
+                                    guardianGameRecordRequest.getMinionDamageDealt()
+                            );
+                            List<GuardianPerk> guardianPerkEntities = guardianGameRecordRequest.getPerks().stream()
+                                    .map(perk -> GuardianPerk.create(guardianGameRecord, perk.name(), perk.level()))
+                                    .toList();
+                            guardianGameRecord.getPerks().addAll(guardianPerkEntities);
+                            return guardianGameRecord;
                         }).toList()
         );
     }

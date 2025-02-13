@@ -3,7 +3,10 @@ package com.momong.five_min_raid.global.exception.constant;
 import com.momong.five_min_raid.domain.game_record.entity.GameRecord;
 import com.momong.five_min_raid.domain.game_record.service.GameRecordCommandService;
 import com.momong.five_min_raid.domain.member.entity.Member;
-import com.momong.five_min_raid.domain.member_game_record.entity.*;
+import com.momong.five_min_raid.domain.member_game_record.entity.GuardianGameRecord;
+import com.momong.five_min_raid.domain.member_game_record.entity.MemberGameRecord;
+import com.momong.five_min_raid.domain.member_game_record.entity.MonsterGameRecord;
+import com.momong.five_min_raid.domain.member_game_record.entity.MonsterPerkTypes;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -49,7 +52,6 @@ public enum CustomExceptionType {
      * 게임 기록({@link GameRecord}, {@link MemberGameRecord}, {@link MonsterGameRecord}, {@link GuardianGameRecord}) 관련 예외
      */
     PERKS_DUPLICATE(2100, "중복된 perk이 있습니다."),
-    INVALID_GUARDIAN_PERKS_SIZE(2101, String.format("가디언이 선택한 perk 개수가 유효하지 않습니다. 가디언은 반드시 %d개의 perk을 선택해야 합니다.", GuardianPerkTypes.SELECTABLE_GUARDIAN_PERKS_SIZE)),
     INVALID_MONSTER_PERKS_SIZE(2102, String.format("몬스터가 선택한 perk 개수가 유효하지 않습니다. 몬스터는 반드시 %d개의 perk을 선택해야 합니다.", MonsterPerkTypes.SELECTABLE_MONSTER_PERKS_SIZE)),
     INVALID_GUARDIAN_GAME_RECORD_SIZE(2103, String.format("기록하고자 하는 가디언의 인게임 정보 개수가 유효하지 않습니다. 한 게임에 가디언은 %d개이므로 동일한 개수의 정보가 필요합니다.", GameRecordCommandService.GUARDIAN_SIZE_REQUIRED)),
     GUARDIAN_GAME_RECORD_DUPLICATE(2104, "기록하고자 하는 가디언의 인게임 정보 중 중복된 항목이 있습니다."),

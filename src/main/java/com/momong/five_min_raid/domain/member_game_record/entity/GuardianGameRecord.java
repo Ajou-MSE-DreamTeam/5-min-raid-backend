@@ -2,7 +2,6 @@ package com.momong.five_min_raid.domain.member_game_record.entity;
 
 import com.momong.five_min_raid.domain.game_record.entity.GameRecord;
 import com.momong.five_min_raid.domain.member.entity.Member;
-import com.momong.five_min_raid.global.common.constant.GuardianPerkType;
 import com.momong.five_min_raid.global.common.constant.GuardianType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -10,6 +9,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.LinkedList;
 import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -21,10 +21,6 @@ public class GuardianGameRecord extends MemberGameRecord {
     @NotNull
     @Enumerated(EnumType.STRING)
     private GuardianType guardianType;
-
-    @NotNull
-    @Embedded
-    private GuardianPerkTypes perks;
 
     @NotNull
     private Integer totalDamageDealt;
@@ -48,12 +44,14 @@ public class GuardianGameRecord extends MemberGameRecord {
 
     private Integer minionDamageDealt;
 
+    @OneToMany(mappedBy = "guardianGameRecord", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<GuardianPerk> perks;
+
     public GuardianGameRecord(
             @NotNull Long id,
             @NotNull Member member,
             @NotNull GameRecord gameRecord,
             @NotNull GuardianType guardianType,
-            @NotNull GuardianPerkTypes perks,
             @NotNull Integer totalDamageDealt,
             @NotNull Integer totalDamageTaken,
             @NotNull Integer totalHealingAmount,
@@ -65,7 +63,6 @@ public class GuardianGameRecord extends MemberGameRecord {
     ) {
         super(id, member, gameRecord);
         this.guardianType = guardianType;
-        this.perks = perks;
         this.totalDamageDealt = totalDamageDealt;
         this.totalDamageTaken = totalDamageTaken;
         this.totalHealingAmount = totalHealingAmount;
@@ -74,13 +71,13 @@ public class GuardianGameRecord extends MemberGameRecord {
         this.isDisconnected = isDisconnected;
         this.minionKillCount = minionKillCount;
         this.minionDamageDealt = minionDamageDealt;
+        this.perks = new LinkedList<>();
     }
 
     public static GuardianGameRecord create(
             @NotNull Member member,
             @NotNull GameRecord gameRecord,
             @NotNull GuardianType guardianType,
-            @NotNull List<GuardianPerkType> perks,
             @NotNull Integer totalDamageDealt,
             @NotNull Integer totalDamageTaken,
             @NotNull Integer totalHealingAmount,
@@ -95,7 +92,6 @@ public class GuardianGameRecord extends MemberGameRecord {
                 member,
                 gameRecord,
                 guardianType,
-                GuardianPerkTypes.create(perks),
                 totalDamageDealt,
                 totalDamageTaken,
                 totalHealingAmount,
@@ -105,9 +101,5 @@ public class GuardianGameRecord extends MemberGameRecord {
                 minionKillCount,
                 minionDamageDealt
         );
-    }
-
-    public List<GuardianPerkType> getPerks() {
-        return this.perks.getPerkTypes();
     }
 }

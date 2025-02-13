@@ -1,13 +1,8 @@
 package com.momong.five_min_raid.domain.member_game_record.dto.request;
 
-import com.momong.five_min_raid.domain.game_record.entity.GameRecord;
-import com.momong.five_min_raid.domain.member.entity.Member;
-import com.momong.five_min_raid.domain.member_game_record.entity.GuardianGameRecord;
-import com.momong.five_min_raid.global.common.constant.GuardianPerkType;
 import com.momong.five_min_raid.global.common.constant.GuardianType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,10 +23,9 @@ public class SaveGuardianGameRecordRequest {
     @NotNull
     private GuardianType guardianType;
 
-    @Schema(description = "가디언이 선택한 perks. 중복되지 않은 3개여야 한다.", example = "[\"ATTACK_BERSERK\", \"ATTACK_CRITICAL\", \"UTIL_HASTE\"]")
-    @Size(min = 3, max = 3)
+    @Schema(description = "가디언이 선택한 perks")
     @NotNull
-    private List<GuardianPerkType> perks;
+    private List<GuardianPerkRequest> perks;
 
     @Schema(description = "총 가한 데미지", example = "500")
     @NotNull
@@ -62,24 +56,4 @@ public class SaveGuardianGameRecordRequest {
 
     @Schema(description = "미니언에게 가한 데미지", example = "250")
     private Integer minionDamageDealt;
-
-    public GuardianGameRecord toEntity(
-            @NotNull Member member,
-            @NotNull GameRecord gameRecord
-    ) {
-        return GuardianGameRecord.create(
-                member,
-                gameRecord,
-                this.guardianType,
-                this.perks,
-                this.totalDamageDealt,
-                this.totalDamageTaken,
-                this.totalHealingAmount,
-                this.numOfDowns,
-                this.numOfRevives,
-                this.isDisconnected,
-                this.minionKillCount,
-                this.minionDamageDealt
-        );
-    }
 }
